@@ -151,3 +151,15 @@ model DisciplinaryCaseReview {
   updatedAt   DateTime @updatedAt
 }
 
+model EmployeePersonalNote {
+  id          String   @id @default(uuid()) @db.Uuid
+  employeeKey String   @db.Text
+  content     String   @db.Text
+  authorEmail String   @db.Text
+  authorName  String   @default("") @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([employeeKey])
+}
+

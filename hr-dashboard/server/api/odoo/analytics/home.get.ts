@@ -1,6 +1,11 @@
 import { getQuery } from 'h3'
 import { loadEmployeesFromOdoo } from '../../../utils/odooEmployees'
 import { BRANCH_COUNTRIES } from '../../../utils/branchClassification'
+import {
+  classifyWorkforceBucket,
+  isActiveEmployeeStatus,
+  isContractStyleEmployee
+} from '../../../utils/employeeClassification'
 
 type HomeAnalytics = {
   headcountByCountry: Array<{ country: string; headcount: number }>
@@ -89,7 +94,7 @@ type HomeAnalytics = {
 }
 
 function isActiveStatus(status: string) {
-  return status.trim().toLowerCase() === 'active'
+  return isActiveEmployeeStatus(status)
 }
 
 function isSeparatedStatus(status: string) {
@@ -124,21 +129,6 @@ function normalizeGender(raw: string | undefined): 'male' | 'female' | null {
   if (v.startsWith('m')) return 'male'
   if (v.startsWith('f')) return 'female'
   return null
-}
-
-/** Permanent vs contracted-without-intern vs intern — used for stacked breakdowns and KPI. */
-function classifyWorkforceBucket(raw: string | undefined): 'permanent' | 'contracted' | 'intern' {
-  const v = (raw ?? '').trim().toLowerCase()
-  if (!v) return 'permanent'
-  if (v.includes('intern')) return 'intern'
-  if (v.includes('contract') || v.includes('fixed') || v.includes('temp') || v.includes('casual')) return 'contracted'
-  if (v.includes('permanent') || v.includes('perm')) return 'permanent'
-  return 'permanent'
-}
-
-function isContractStyleEmployee(raw: string | undefined) {
-  const b = classifyWorkforceBucket(raw)
-  return b === 'contracted' || b === 'intern'
 }
 
 /** Uses `Employee.employeeType` (Odoo `employment_type` / mapped field) — distinct from permanent/contract pie logic. */

@@ -329,6 +329,84 @@
             </div>
           </div>
         </section>
+
+        <section class="rounded-xl border border-slate-200 bg-white shadow-card p-5 shadow-lg shadow-slate-900/10">
+          <div class="flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <h2 class="text-sm font-semibold text-brand-blue">Confidential Notes</h2>
+              <p class="mt-1 text-xs text-slate-500">
+                Sensitive personal context HR should be aware of (e.g. illness in the family, pregnancy, bereavement). Visible to HR only. Not included in the profile PDF.
+              </p>
+            </div>
+            <button
+              type="button"
+              class="shrink-0 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-semibold text-hr-navy hover:bg-slate-100"
+              @click="confidentialNotesRevealed = !confidentialNotesRevealed"
+            >
+              {{ confidentialNotesRevealed ? 'Hide notes' : 'Show notes' }}
+            </button>
+          </div>
+
+          <div v-if="confidentialNotesRevealed" class="mt-4 rounded-lg bg-slate-50 p-4 ring-1 ring-slate-200/80">
+            <form class="space-y-2" @submit.prevent="addPersonalNote">
+              <label class="block">
+                <span class="text-xs font-medium text-slate-600">Add a new note</span>
+                <textarea
+                  v-model="personalNoteDraft"
+                  rows="3"
+                  maxlength="4000"
+                  class="mt-1 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none"
+                  placeholder="Write a brief, factual note. Avoid speculation."
+                />
+              </label>
+              <div class="flex items-center justify-between gap-3">
+                <p v-if="personalNoteError" class="text-xs text-pink-700">{{ personalNoteError }}</p>
+                <p v-else class="text-xs text-slate-400">{{ personalNoteDraft.length }} / 4000</p>
+                <button
+                  type="submit"
+                  class="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-hr-navy hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                  :disabled="!personalNoteDraft.trim() || personalNoteSaving"
+                >
+                  {{ personalNoteSaving ? 'Saving…' : 'Add note' }}
+                </button>
+              </div>
+            </form>
+
+            <div class="mt-4 border-t border-slate-200 pt-3">
+              <div v-if="personalNotesPending" class="text-sm text-slate-600">Loading notes…</div>
+              <div v-else-if="personalNotesError" class="text-sm text-pink-700">Could not load notes.</div>
+              <div v-else-if="!personalNotes.length" class="text-sm text-slate-600">No notes yet.</div>
+              <ul v-else class="space-y-3">
+                <li v-for="n in personalNotes" :key="n.id" class="rounded-md border border-slate-200 bg-white p-3">
+                  <div class="flex items-start justify-between gap-3">
+                    <p class="whitespace-pre-wrap break-words text-sm text-slate-900">{{ n.content }}</p>
+                    <button
+                      type="button"
+                      class="grid h-7 w-7 shrink-0 place-items-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 hover:bg-pink-50 hover:text-pink-700 disabled:cursor-not-allowed disabled:opacity-60"
+                      :disabled="personalNoteDeletingId === n.id"
+                      aria-label="Delete note"
+                      title="Delete note"
+                      @click="deletePersonalNote(n.id)"
+                    >
+                      <svg viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4">
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M8.5 2.5a1 1 0 0 0-1 1V4H5.5a1 1 0 1 0 0 2h.47l.67 10.02A2 2 0 0 0 8.63 18h2.74a2 2 0 0 0 1.99-1.98L14.03 6h.47a1 1 0 1 0 0-2h-2v-.5a1 1 0 0 0-1-1h-3ZM9.5 4h1V3.5h-1V4Zm-1.5 4a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1Zm5 1a1 1 0 1 0-2 0v6a1 1 0 1 0 2 0V9Z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="mt-2 flex flex-wrap items-center gap-x-2 text-[11px] text-slate-500">
+                    <span>{{ n.authorName || n.authorEmail || 'Unknown author' }}</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{{ formatPersonalNoteDate(n.createdAt) }}</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
       </div>
 
       <div
@@ -469,6 +547,85 @@ const {
 } = attachmentsRes
 
 const employee = computed(() => data.value ?? null)
+
+type PersonalNote = {
+  id: string
+  content: string
+  authorEmail: string
+  authorName: string
+  createdAt: string
+  updatedAt: string
+}
+
+const confidentialNotesRevealed = ref(false)
+const personalNoteDraft = ref('')
+const personalNoteSaving = ref(false)
+const personalNoteError = ref('')
+const personalNoteDeletingId = ref<string | null>(null)
+
+const {
+  data: personalNotesPayload,
+  pending: personalNotesPending,
+  error: personalNotesError,
+  refresh: refreshPersonalNotes
+} = useFetch<{ notes: PersonalNote[] }>(() => `/api/employees/${employeeKey.value}/personal-notes`, {
+  immediate: false
+})
+
+watch(confidentialNotesRevealed, (revealed) => {
+  if (revealed && !personalNotesPayload.value) void refreshPersonalNotes()
+})
+
+const personalNotes = computed(() => personalNotesPayload.value?.notes ?? [])
+
+const personalNoteDateFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false
+})
+
+function formatPersonalNoteDate(iso: string) {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return iso
+  return personalNoteDateFormatter.format(d)
+}
+
+async function addPersonalNote() {
+  const content = personalNoteDraft.value.trim()
+  if (!content) return
+  personalNoteError.value = ''
+  personalNoteSaving.value = true
+  try {
+    await $fetch(`/api/employees/${employeeKey.value}/personal-notes`, {
+      method: 'POST',
+      body: { content }
+    })
+    personalNoteDraft.value = ''
+    await refreshPersonalNotes()
+  } catch (err) {
+    const e = err as { data?: { message?: string }; statusMessage?: string; message?: string }
+    personalNoteError.value = e?.data?.message || e?.statusMessage || e?.message || 'Failed to save note'
+  } finally {
+    personalNoteSaving.value = false
+  }
+}
+
+async function deletePersonalNote(id: string) {
+  personalNoteError.value = ''
+  personalNoteDeletingId.value = id
+  try {
+    await $fetch(`/api/employees/${employeeKey.value}/personal-notes/${id}`, { method: 'DELETE' })
+    await refreshPersonalNotes()
+  } catch (err) {
+    const e = err as { data?: { message?: string }; statusMessage?: string; message?: string }
+    personalNoteError.value = e?.data?.message || e?.statusMessage || e?.message || 'Failed to delete note'
+  } finally {
+    personalNoteDeletingId.value = null
+  }
+}
 
 function formatYmdWhenPresent(value: string | null | undefined): string | null {
   const s = (value ?? '').trim()

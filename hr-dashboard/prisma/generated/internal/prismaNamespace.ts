@@ -399,7 +399,8 @@ export const ModelName = {
   NewHireCheckinStatus: 'NewHireCheckinStatus',
   ContractChangeReview: 'ContractChangeReview',
   MedicalEnrollmentReview: 'MedicalEnrollmentReview',
-  DisciplinaryCaseReview: 'DisciplinaryCaseReview'
+  DisciplinaryCaseReview: 'DisciplinaryCaseReview',
+  EmployeePersonalNote: 'EmployeePersonalNote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "vacancy" | "criticalRecruitment" | "disciplinaryCase" | "disciplinaryCaseInclude" | "contractChange" | "medicalEnrollment" | "eapReferral" | "cPlayerNote" | "headcountSnapshot" | "upcomingContractExpiryStatus" | "recruitmentOnboardingChecklist" | "recruitmentExitChecklist" | "newHireCheckinStatus" | "contractChangeReview" | "medicalEnrollmentReview" | "disciplinaryCaseReview"
+    modelProps: "vacancy" | "criticalRecruitment" | "disciplinaryCase" | "disciplinaryCaseInclude" | "contractChange" | "medicalEnrollment" | "eapReferral" | "cPlayerNote" | "headcountSnapshot" | "upcomingContractExpiryStatus" | "recruitmentOnboardingChecklist" | "recruitmentExitChecklist" | "newHireCheckinStatus" | "contractChangeReview" | "medicalEnrollmentReview" | "disciplinaryCaseReview" | "employeePersonalNote"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1603,6 +1604,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    EmployeePersonalNote: {
+      payload: Prisma.$EmployeePersonalNotePayload<ExtArgs>
+      fields: Prisma.EmployeePersonalNoteFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmployeePersonalNoteFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmployeePersonalNoteFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>
+        }
+        findFirst: {
+          args: Prisma.EmployeePersonalNoteFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmployeePersonalNoteFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>
+        }
+        findMany: {
+          args: Prisma.EmployeePersonalNoteFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>[]
+        }
+        create: {
+          args: Prisma.EmployeePersonalNoteCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>
+        }
+        createMany: {
+          args: Prisma.EmployeePersonalNoteCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmployeePersonalNoteCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>[]
+        }
+        delete: {
+          args: Prisma.EmployeePersonalNoteDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>
+        }
+        update: {
+          args: Prisma.EmployeePersonalNoteUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>
+        }
+        deleteMany: {
+          args: Prisma.EmployeePersonalNoteDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmployeePersonalNoteUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmployeePersonalNoteUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>[]
+        }
+        upsert: {
+          args: Prisma.EmployeePersonalNoteUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmployeePersonalNotePayload>
+        }
+        aggregate: {
+          args: Prisma.EmployeePersonalNoteAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmployeePersonalNote>
+        }
+        groupBy: {
+          args: Prisma.EmployeePersonalNoteGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeePersonalNoteGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmployeePersonalNoteCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmployeePersonalNoteCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1832,6 +1907,19 @@ export const DisciplinaryCaseReviewScalarFieldEnum = {
 } as const
 
 export type DisciplinaryCaseReviewScalarFieldEnum = (typeof DisciplinaryCaseReviewScalarFieldEnum)[keyof typeof DisciplinaryCaseReviewScalarFieldEnum]
+
+
+export const EmployeePersonalNoteScalarFieldEnum = {
+  id: 'id',
+  employeeKey: 'employeeKey',
+  content: 'content',
+  authorEmail: 'authorEmail',
+  authorName: 'authorName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeePersonalNoteScalarFieldEnum = (typeof EmployeePersonalNoteScalarFieldEnum)[keyof typeof EmployeePersonalNoteScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2067,6 +2155,7 @@ export type GlobalOmitConfig = {
   contractChangeReview?: Prisma.ContractChangeReviewOmit
   medicalEnrollmentReview?: Prisma.MedicalEnrollmentReviewOmit
   disciplinaryCaseReview?: Prisma.DisciplinaryCaseReviewOmit
+  employeePersonalNote?: Prisma.EmployeePersonalNoteOmit
 }
 
 /* Types for Logging */

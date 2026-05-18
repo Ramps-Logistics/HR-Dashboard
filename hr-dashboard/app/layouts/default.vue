@@ -42,6 +42,40 @@
         </nav>
 
         <div
+          v-if="auth?.authenticated"
+          class="hidden shrink-0 items-center gap-2 sm:flex"
+        >
+          <NuxtLink
+            to="/calendar"
+            class="relative inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-hr-navy transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-hr-navy/40"
+            :title="calendarButtonTitle"
+            aria-label="Open HR calendar"
+          >
+            <svg
+              class="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3.5" y="5" width="17" height="15" rx="2" />
+              <path d="M3.5 9.5h17M8 3.25v3.5M16 3.25v3.5" />
+            </svg>
+            <span
+              v-if="todayAlertCount > 0"
+              class="absolute -right-1 -top-1 inline-flex h-4 min-w-[1rem] items-center justify-center rounded-full border border-white bg-pink-600 px-1 text-[10px] font-semibold text-white"
+              aria-hidden="true"
+            >
+              {{ todayAlertCount > 9 ? '9+' : todayAlertCount }}
+            </span>
+            <span class="sr-only">{{ calendarButtonTitle }}</span>
+          </NuxtLink>
+        </div>
+
+        <div
           v-if="auth?.authenticated && auth.user"
           ref="userMenuRoot"
           class="relative shrink-0"
@@ -141,6 +175,8 @@
 </template>
 
 <script setup lang="ts">
+import { groupAlertsByTier, utcTodayMs } from '~/utils/hrCalendar'
+
 const route = useRoute()
 const signOutDialogOpen = ref(false)
 const userMenuOpen = ref(false)
@@ -208,4 +244,17 @@ const navItems = [
   { label: 'Medical Enrollments & EAP', to: '/medical-enrollments-eap' },
   { label: 'Progressive Discipline', to: '/disciplinary' }
 ]
+
+const { data: calendarData } = useHrCalendarEvents()
+
+const todayAlertCount = computed(() => {
+  const events = calendarData.value?.events ?? []
+  return groupAlertsByTier(events, utcTodayMs()).today.length
+})
+
+const calendarButtonTitle = computed(() => {
+  const n = todayAlertCount.value
+  if (n === 0) return 'HR Calendar'
+  return `HR Calendar — ${n} alert${n === 1 ? '' : 's'} today`
+})
 </script>

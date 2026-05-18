@@ -178,6 +178,24 @@
     color: #475569;
     white-space: nowrap;
   }
+
+  /* Subtle "ring" animation used by the Alerts bell when there are
+     today-alerts. Loops every 4s with most of the time at rest so it
+     draws attention without becoming visual noise. */
+  .hr-bell-ring {
+    transform-origin: 50% 10%;
+    animation: hr-bell-ring 4s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+  }
+
+  @keyframes hr-bell-ring {
+    0%, 70%, 100% { transform: rotate(0deg); }
+    72%, 80%, 88% { transform: rotate(-14deg); }
+    76%, 84%, 92% { transform: rotate(14deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hr-bell-ring { animation: none; }
+  }
 }
 
 @layer base {

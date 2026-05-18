@@ -97,3 +97,8 @@ export type MedicalEnrollmentReview = Prisma.MedicalEnrollmentReviewModel
  * 
  */
 export type DisciplinaryCaseReview = Prisma.DisciplinaryCaseReviewModel
+/**
+ * Model EmployeePersonalNote
+ * 
+ */
+export type EmployeePersonalNote = Prisma.EmployeePersonalNoteModel

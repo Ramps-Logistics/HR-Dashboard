@@ -66,7 +66,8 @@ export const ModelName = {
   NewHireCheckinStatus: 'NewHireCheckinStatus',
   ContractChangeReview: 'ContractChangeReview',
   MedicalEnrollmentReview: 'MedicalEnrollmentReview',
-  DisciplinaryCaseReview: 'DisciplinaryCaseReview'
+  DisciplinaryCaseReview: 'DisciplinaryCaseReview',
+  EmployeePersonalNote: 'EmployeePersonalNote'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -275,6 +276,19 @@ export const DisciplinaryCaseReviewScalarFieldEnum = {
 } as const
 
 export type DisciplinaryCaseReviewScalarFieldEnum = (typeof DisciplinaryCaseReviewScalarFieldEnum)[keyof typeof DisciplinaryCaseReviewScalarFieldEnum]
+
+
+export const EmployeePersonalNoteScalarFieldEnum = {
+  id: 'id',
+  employeeKey: 'employeeKey',
+  content: 'content',
+  authorEmail: 'authorEmail',
+  authorName: 'authorName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmployeePersonalNoteScalarFieldEnum = (typeof EmployeePersonalNoteScalarFieldEnum)[keyof typeof EmployeePersonalNoteScalarFieldEnum]
 
 
 export const SortOrder = {
