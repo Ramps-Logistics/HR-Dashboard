@@ -41,7 +41,7 @@
               </span>
               <h2 class="text-gradient-brand text-lg font-bold tracking-tight">Alerts</h2>
             </div>
-            <p class="text-xs text-slate-500">Today, tomorrow, and next week.</p>
+            <p class="text-xs text-slate-500">This week and next week.</p>
           </div>
           <button
             type="button"
@@ -92,7 +92,7 @@
                       <span class="inline-flex items-center rounded-full border px-2 py-0.5 font-medium" :class="eventTypeStyle(event.type).badge">
                         {{ eventTypeLabel(event.type) }}
                       </span>
-                      <span v-if="section === 'next_week'" class="tabular-nums">{{ shortDateLabel(event.date) }}</span>
+                      <span v-if="section === 'this_week' || section === 'next_week'" class="tabular-nums">{{ shortDateLabel(event.date) }}</span>
                       <span v-if="event.position" class="truncate">{{ event.position }}</span>
                       <span v-if="event.countryAssigned" class="truncate">{{ event.countryAssigned }}</span>
                     </div>
@@ -147,7 +147,8 @@ const visibleSections = computed<AlertSection[]>(() =>
 function sectionBadgeClass(section: AlertSection): string {
   if (section === 'today') return 'border-pink-200 bg-pink-50 text-pink-800'
   if (section === 'tomorrow') return 'border-amber-200 bg-amber-50 text-amber-800'
-  return 'border-blue-200 bg-blue-50 text-blue-900'
+  if (section === 'this_week') return 'border-blue-200 bg-blue-50 text-blue-900'
+  return 'border-slate-200 bg-slate-50 text-slate-700'
 }
 
 function onBackdropClick() {

@@ -164,6 +164,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'update:completedCount', value: number): void
+  (e: 'update:activeCount', value: number): void
 }>()
 
 const historyOpen = defineModel<boolean>('historyOpen', { default: false })
@@ -228,7 +229,6 @@ function utcTodayMs() {
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000
-const APPROACH_WINDOW_DAYS = 14
 const CHECKIN_MONTHS = [1, 2, 3, 4, 5, 6] as const
 
 type Row = {
@@ -300,12 +300,12 @@ const rows = computed<Row[]>(() => {
     if (today >= probationEnd) continue
     for (const months of CHECKIN_MONTHS) {
       if (!monthAllowed(months)) continue
-      const dueMs = addMonthsClampedUtcMs(startMs, months)
-      const daysUntil = Math.ceil((dueMs - today) / DAY_MS)
-      const shouldShow = daysUntil >= 0 && daysUntil <= APPROACH_WINDOW_DAYS
       const key = `emp:${i.employeeKey}|start:${start}|checkin:${months}`
       const status = statusByRowKey.value[key] ?? 'no_action'
-      if (!shouldShow || status === 'completed') continue
+      if (status === 'completed') continue
+      const dueMs = addMonthsClampedUtcMs(startMs, months)
+      const daysUntil = Math.ceil((dueMs - today) / DAY_MS)
+      if (daysUntil < 0) continue
       out.push({
         key,
         employeeKey: i.employeeKey,
@@ -317,6 +317,7 @@ const rows = computed<Row[]>(() => {
         months,
         daysUntil
       })
+      break
     }
   }
   return out.sort((a, b) => a.daysUntil - b.daysUntil || a.name.localeCompare(b.name) || a.employeeKey.localeCompare(b.employeeKey))
@@ -355,6 +356,12 @@ const completedRows = computed<Row[]>(() => {
 watch(
   () => completedRows.value.length,
   (n) => emit('update:completedCount', n),
+  { immediate: true }
+)
+
+watch(
+  () => rows.value.length,
+  (n) => emit('update:activeCount', n),
   { immediate: true }
 )
 </script>

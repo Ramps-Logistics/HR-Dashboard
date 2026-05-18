@@ -189,43 +189,65 @@ export function relativeDaysLabel(daysUntilValue: number): string {
   return `In ${daysUntilValue} days`
 }
 
-export type AlertSection = 'today' | 'tomorrow' | 'next_week'
+export type AlertSection = 'today' | 'tomorrow' | 'this_week' | 'next_week'
 
-export const ALERT_SECTION_ORDER: readonly AlertSection[] = ['today', 'tomorrow', 'next_week']
+export const ALERT_SECTION_ORDER: readonly AlertSection[] = [
+  'today',
+  'tomorrow',
+  'this_week',
+  'next_week'
+]
 
 /**
- * Map a `daysUntil` value to one of the drawer sections.
- * Today = 0, Tomorrow = 1, Next week = 2..7. Everything else returns `null`
- * and is not surfaced in the alerts drawer (still visible on the calendar).
+ * Map an event's date to one of the drawer sections, using Sunday-start
+ * calendar weeks.
+ *
+ * - `today`     = today's date
+ * - `tomorrow`  = day after today
+ * - `this_week` = remaining days of the current calendar week, after tomorrow
+ *                 (i.e. up to the Saturday of this week)
+ * - `next_week` = the full next calendar week (Sun..Sat)
+ *
+ * Anything outside that window returns `null` and is omitted from the drawer
+ * (still visible on the calendar grid).
  */
-export function alertSectionFor(daysUntilValue: number): AlertSection | null {
-  if (daysUntilValue === 0) return 'today'
-  if (daysUntilValue === 1) return 'tomorrow'
-  if (daysUntilValue >= 2 && daysUntilValue <= 7) return 'next_week'
+export function alertSectionFor(eventYmd: string, todayMs: number = utcTodayMs()): AlertSection | null {
+  const d = daysUntil(eventYmd, todayMs)
+  if (d === null || d < 0) return null
+  if (d === 0) return 'today'
+  if (d === 1) return 'tomorrow'
+
+  // Calendar-week boundaries with Sunday as day 0.
+  const dow = new Date(todayMs).getUTCDay()
+  const daysUntilEndOfThisWeek = 6 - dow
+  const daysUntilStartOfNextWeek = daysUntilEndOfThisWeek + 1
+  const daysUntilEndOfNextWeek = daysUntilStartOfNextWeek + 6
+
+  if (d <= daysUntilEndOfThisWeek) return 'this_week'
+  if (d >= daysUntilStartOfNextWeek && d <= daysUntilEndOfNextWeek) return 'next_week'
   return null
 }
 
 export function alertSectionLabel(section: AlertSection): string {
   if (section === 'today') return 'Today'
   if (section === 'tomorrow') return 'Tomorrow'
+  if (section === 'this_week') return 'This week'
   return 'Next week'
 }
 
 export type GroupedDrawerAlerts = Record<AlertSection, HrCalendarEvent[]>
 
 /**
- * Bucket events into the three drawer sections. Events outside 0..7 days
- * are dropped because they're not part of the alerts surface.
+ * Bucket events into the four drawer sections. Events outside today through
+ * end-of-next-week are dropped because they're not part of the alerts surface.
  */
 export function groupAlertsForDrawer(
   events: readonly HrCalendarEvent[],
   todayMs: number = utcTodayMs()
 ): GroupedDrawerAlerts {
-  const out: GroupedDrawerAlerts = { today: [], tomorrow: [], next_week: [] }
+  const out: GroupedDrawerAlerts = { today: [], tomorrow: [], this_week: [], next_week: [] }
   for (const e of events) {
-    const d = daysUntil(e.date, todayMs)
-    if (d === null) continue
-    const section = alertSectionFor(d)
+    const section = alertSectionFor(e.date, todayMs)
     if (section) out[section].push(e)
   }
   return out

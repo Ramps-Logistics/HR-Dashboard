@@ -900,7 +900,7 @@
           <span class="mt-1 h-6 w-1 shrink-0 rounded-full bg-brand-blue" aria-hidden="true" />
           <div class="min-w-0 space-y-0.5">
             <h2 class="text-gradient-brand text-xl font-bold tracking-tight">Upcoming Onboarding Check-ins</h2>
-            <p class="text-xs text-slate-500">Shows 1–6 month check-ins when they are due within the next 14 days (probation &lt; 6 months).</p>
+            <p class="text-xs text-slate-500">Shows 1–6 month check-ins (probation &lt; 6 months).</p>
           </div>
         </div>
 
@@ -955,7 +955,13 @@
         </div>
       </div>
 
-      <div v-if="upcomingCheckinsExpanded">
+      <div v-if="upcomingCheckinsExpanded" class="space-y-3">
+        <div class="flex justify-end">
+          <div class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-brand-blue/30 bg-brand-blue/10 px-3 py-1 text-xs font-semibold text-brand-blue">
+            <span class="uppercase tracking-wide opacity-80">Count</span>
+            <span class="tabular-nums">{{ activeCheckinsCount }}</span>
+          </div>
+        </div>
         <div v-if="probationNewHiresPending" class="rounded-md border border-slate-200 bg-white shadow-card p-4 text-slate-800">Loading…</div>
         <div v-else-if="probationNewHiresError" class="rounded-md border border-pink-200 bg-pink-50 p-4 text-pink-800">
           Failed to load onboarding check-ins.
@@ -967,6 +973,7 @@
             :items="filteredCheckinsNewHires"
             :checkin-filter="upcomingCheckinsFilter"
             @update:completed-count="completedCheckinsCount = $event"
+            @update:active-count="activeCheckinsCount = $event"
           />
         </div>
       </div>
@@ -1566,6 +1573,7 @@ const probationNewHiresErrorMessage = computed(() => getErrorMessage(probationNe
 const upcomingCheckinsExpanded = ref(true)
 const upcomingCheckinsFilter = ref<'all' | '1' | '2-3' | '4-6'>('all')
 const completedCheckinsCount = ref(0)
+const activeCheckinsCount = ref(0)
 const completedCheckinsHistoryOpen = ref(false)
 const selectedCheckinsCountry = ref('')
 const checkinsCountries = computed(() => ensureUsaOption(uniqueSorted(probationNewHires.value.map((n) => n.countryAssigned))))
