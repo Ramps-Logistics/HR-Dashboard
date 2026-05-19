@@ -14,7 +14,7 @@
     >
       <button type="button" class="surface-tint-card relative overflow-hidden rounded-xl p-4 pl-5 shadow-card text-left scale-[0.97] transition-transform hover:scale-[1.00] active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/40" @click="navigateRecruitmentSection('critical-vacancies')">
         <span aria-hidden="true" class="absolute inset-x-0 top-0 h-[3px] bg-pink-500" />
-        <div class="text-xs font-medium uppercase tracking-wide text-slate-500">Critical Vacancies</div>
+        <div class="text-xs font-medium uppercase tracking-wide text-slate-500">Vacancies</div>
         <div class="mt-1 text-2xl font-extrabold tabular-nums tracking-tight text-pink-600">{{ criticalVacanciesKpi }}</div>
         <div class="mt-1 text-sm text-slate-500">Open roles</div>
       </button>
@@ -75,7 +75,7 @@
       <div class="flex min-w-0 flex-wrap items-center justify-between gap-3">
         <div class="flex min-w-0 items-start gap-3">
           <span class="mt-1 h-6 w-1 shrink-0 rounded-full bg-brand-blue" aria-hidden="true" />
-          <h2 class="text-gradient-brand text-xl font-bold tracking-tight">Critical Vacancies</h2>
+          <h2 class="text-gradient-brand text-xl font-bold tracking-tight">Vacancies</h2>
         </div>
         <div class="flex flex-wrap items-center gap-2">
           <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
@@ -86,6 +86,16 @@
             >
               <option value="">All</option>
               <option v-for="c in vacancyListCountries" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+            <span class="whitespace-nowrap">Company</span>
+            <select
+              v-model="selectedVacancyCompany"
+              class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+            >
+              <option value="">All</option>
+              <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
             </select>
           </label>
           <button
@@ -132,6 +142,15 @@
             >
               <option value="" disabled>Select country</option>
               <option v-for="c in vacancyCountries" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+          <label class="block">
+            <div class="mb-1 text-sm text-slate-600">Company</div>
+            <select
+              v-model="vacancyForm.company"
+              class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900"
+            >
+              <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
             </select>
           </label>
           <label class="block">
@@ -196,7 +215,7 @@
           <div class="flex items-start justify-between gap-4">
             <div class="min-w-0">
               <div class="text-sm font-semibold text-hr-navy">{{ v.positionTitle }}</div>
-              <div class="mt-1 text-xs text-slate-600">{{ v.department }} · {{ v.country }}</div>
+              <div class="mt-1 text-xs text-slate-600">{{ v.department }} · {{ v.country }} · {{ v.company || 'Ramps Logistics' }}</div>
               <div v-if="v.notes" class="mt-1.5 text-xs text-slate-500 italic">{{ v.notes }}</div>
             </div>
 
@@ -212,6 +231,7 @@
                 >
                   Edit
                 </button>
+                <AuditTrailButton entity-type="Vacancy" :entity-id="v.id" size="sm" />
                 <button
                   type="button"
                   class="inline-flex h-6 w-6 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-600 hover:bg-red-50 hover:text-red-600"
@@ -268,6 +288,15 @@
                 >
                   <option value="" disabled>Select country</option>
                   <option v-for="c in vacancyCountries" :key="c" :value="c">{{ c }}</option>
+                </select>
+              </label>
+              <label class="block">
+                <div class="mb-1 text-xs text-slate-600">Company</div>
+                <select
+                  v-model="vacancyEditForm.company"
+                  class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900"
+                >
+                  <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
                 </select>
               </label>
               <label class="block">
@@ -362,6 +391,16 @@
             </select>
           </label>
           <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+            <span class="whitespace-nowrap">Company</span>
+            <select
+              v-model="selectedRecruitmentCompany"
+              class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+            >
+              <option value="">All</option>
+              <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
             <span class="whitespace-nowrap">Stage</span>
             <select
               v-model="selectedRecruitmentStage"
@@ -381,6 +420,31 @@
             <span>Add candidate</span>
           </button>
         </div>
+      </div>
+      <div v-if="shortlistedCriticalRecruitment.length > 0" class="-mt-2 flex justify-start">
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 rounded-md border border-teal-200 bg-teal-50 px-3 py-1.5 text-sm font-medium text-teal-800 hover:bg-teal-100"
+          @click="shortlistedCandidatesModalOpen = true"
+        >
+          <svg
+            class="h-4 w-4 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="7" cy="8" r="3" />
+            <path d="M2 19c0-2.76 2.24-5 5-5s5 2.24 5 5" />
+            <line x1="14" y1="8" x2="22" y2="8" />
+            <line x1="14" y1="12" x2="22" y2="12" />
+            <line x1="14" y1="16" x2="22" y2="16" />
+          </svg>
+          <span>Shortlisted Candidates ({{ shortlistedCriticalRecruitment.length }})</span>
+        </button>
       </div>
 
       <form
@@ -413,6 +477,15 @@
             >
               <option value="" disabled>Select country</option>
               <option v-for="c in vacancyCountries" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+          <label class="block">
+            <div class="mb-1 text-sm text-slate-600">Company</div>
+            <select
+              v-model="criticalRecruitmentForm.company"
+              class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900"
+            >
+              <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
             </select>
           </label>
           <label class="block">
@@ -469,21 +542,23 @@
       <div v-else class="rounded-md border border-slate-200 bg-white shadow-card">
         <table class="w-full table-fixed border-collapse text-center text-sm">
           <colgroup>
-            <col style="width: 18%" />
-            <col style="width: 17%" />
+            <col style="width: 13%" />
+            <col style="width: 13%" />
+            <col style="width: 11%" />
+            <col style="width: 10%" />
             <col style="width: 12%" />
-            <col style="width: 14%" />
-            <col style="width: 27%" />
-            <col style="width: 12%" />
+            <col style="width: 21%" />
+            <col style="width: 20%" />
           </colgroup>
           <thead class="bg-slate-100 text-slate-600">
             <tr>
               <th class="px-3 py-3 align-bottom font-medium">Candidate</th>
               <th class="px-3 py-3 align-bottom font-medium">Position</th>
               <th class="px-3 py-3 align-bottom font-medium">Country</th>
+              <th class="px-3 py-3 align-bottom font-medium">Company</th>
               <th class="px-3 py-3 align-bottom font-medium">Stage</th>
               <th class="px-3 py-3 align-bottom font-medium">Notes</th>
-              <th class="px-3 py-3 align-bottom font-medium"></th>
+              <th class="px-3 py-3 text-center align-bottom font-medium">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -510,6 +585,14 @@
                   >
                     <option value="" disabled>Select country</option>
                     <option v-for="c in vacancyCountries" :key="c" :value="c">{{ c }}</option>
+                  </select>
+                </td>
+                <td class="min-w-0 px-3 py-3 align-top">
+                  <select
+                    v-model="criticalRecruitmentEditForm.company"
+                    class="w-full min-w-0 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900"
+                  >
+                    <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
                   </select>
                 </td>
                 <td class="min-w-0 px-3 py-3 align-top">
@@ -555,8 +638,9 @@
                   <td class="min-w-0 break-words px-3 py-3 align-top text-slate-900">{{ c.candidateName }}</td>
                   <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ c.position }}</td>
                   <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ c.country }}</td>
+                  <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ c.company || '—' }}</td>
                   <td class="min-w-0 px-3 py-3 align-top">
-                    <span :class="[tableDataBadgeClass, criticalRecruitmentStageBadgeClass(c.stage)]">
+                    <span :class="[tableDataBadgeClass, criticalRecruitmentStageBadgeClass(c.stage), '!text-center']">
                       {{ normalizeRecruitmentStage(c.stage) }}
                     </span>
                   </td>
@@ -569,25 +653,80 @@
                     <div class="flex justify-end gap-2">
                       <button
                         type="button"
-                        class="rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-800 hover:bg-slate-100"
+                        class="inline-flex h-8 items-center rounded-md border border-slate-200 bg-slate-50 px-3 text-xs text-slate-800 hover:bg-slate-100"
                         @click="startEditCriticalRecruitment(c)"
                       >
                         Edit
                       </button>
-                      <button
-                        type="button"
-                        class="rounded-md border border-pink-200 bg-pink-50 px-3 py-1.5 text-xs text-pink-800 hover:bg-pink-100"
-                        @click="deleteCriticalRecruitment(c.id)"
-                      >
-                        Delete
-                      </button>
+                      <AuditTrailButton entity-type="CriticalRecruitment" :entity-id="c.id" />
+                      <div class="group relative inline-flex">
+                        <button
+                          type="button"
+                          class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-700 hover:bg-teal-50 hover:text-teal-700 disabled:opacity-60"
+                          aria-label="Shortlist candidate"
+                          :disabled="criticalRecruitmentSaving"
+                          @click="toggleShortlistCandidate(c.id, true)"
+                        >
+                          <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <circle cx="7" cy="8" r="3" />
+                            <path d="M2 19c0-2.76 2.24-5 5-5s5 2.24 5 5" />
+                            <line x1="14" y1="8" x2="22" y2="8" />
+                            <line x1="14" y1="12" x2="22" y2="12" />
+                            <line x1="14" y1="16" x2="22" y2="16" />
+                          </svg>
+                        </button>
+                        <span
+                          class="pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs font-medium text-white opacity-0 transition-opacity group-hover:opacity-100"
+                        >
+                          Shortlist candidate
+                        </span>
+                      </div>
+                      <div class="group relative inline-flex">
+                        <button
+                          type="button"
+                          class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-pink-200 bg-pink-50 text-pink-800 hover:bg-pink-100"
+                          aria-label="Delete candidate"
+                          @click="deleteCriticalRecruitment(c.id)"
+                        >
+                          <svg
+                            class="h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.75"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M3 6h18" />
+                            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                            <path d="M10 11v6" />
+                            <path d="M14 11v6" />
+                          </svg>
+                        </button>
+                        <span
+                          class="pointer-events-none absolute -top-8 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs font-medium text-white opacity-0 transition-opacity group-hover:opacity-100"
+                        >
+                          Delete candidate
+                        </span>
+                      </div>
                     </div>
                   </td>
                 </template>
               </tr>
 
               <tr v-if="(filteredCriticalRecruitment?.length ?? 0) === 0" class="border-t border-hr-navy/25">
-                <td colspan="6" class="px-3 py-6 text-center text-slate-600">No candidates found.</td>
+                <td colspan="7" class="px-3 py-6 text-center text-slate-600">No candidates found.</td>
               </tr>
             </tbody>
         </table>
@@ -595,6 +734,101 @@
       <div v-if="isReportMode && filteredCriticalRecruitment.length > criticalRecruitmentForDisplay.length" class="mt-3 text-xs text-slate-400">
         Showing top {{ criticalRecruitmentForDisplay.length }} candidates. See the dashboard for the full list.
       </div>
+
+      <Teleport to="body">
+        <div
+          v-if="shortlistedCandidatesModalOpen"
+          class="fixed inset-0 z-[200] flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="shortlisted-candidates-dialog-title"
+        >
+          <button
+            type="button"
+            class="absolute inset-0 bg-slate-900/60 backdrop-blur-[1px]"
+            aria-label="Dismiss"
+            @click="shortlistedCandidatesModalOpen = false"
+          />
+          <div
+            class="relative z-10 flex max-h-[92vh] w-full max-w-7xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card"
+            @click.stop
+          >
+            <div class="flex items-start justify-between gap-3 border-b border-slate-200 px-5 py-4">
+              <div class="min-w-0">
+                <h2 id="shortlisted-candidates-dialog-title" class="text-base font-semibold text-slate-900">Shortlisted Candidates</h2>
+                <p class="mt-0.5 text-xs text-slate-500">Strong candidates without a current matching position. Restore to move them back into the active pipeline.</p>
+              </div>
+              <button
+                type="button"
+                class="-mr-1 -mt-1 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+                aria-label="Close"
+                @click="shortlistedCandidatesModalOpen = false"
+              >
+                <svg viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5" aria-hidden="true">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M4.21 4.21a.75.75 0 0 1 1.06 0L10 8.94l4.73-4.73a.75.75 0 1 1 1.06 1.06L11.06 10l4.73 4.73a.75.75 0 1 1-1.06 1.06L10 11.06l-4.73 4.73a.75.75 0 1 1-1.06-1.06L8.94 10 4.21 5.27a.75.75 0 0 1 0-1.06Z" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="min-w-0 overflow-auto px-5 py-4">
+              <div class="rounded-md border border-slate-200 bg-white">
+                <table class="w-full table-fixed border-collapse text-center text-sm">
+                  <colgroup>
+                    <col style="width: 14%" />
+                    <col style="width: 14%" />
+                    <col style="width: 12%" />
+                    <col style="width: 14%" />
+                    <col style="width: 26%" />
+                    <col style="width: 20%" />
+                  </colgroup>
+                  <thead class="bg-slate-100 text-slate-600">
+                    <tr>
+                      <th class="px-3 py-3 align-bottom font-medium">Candidate</th>
+                      <th class="px-3 py-3 align-bottom font-medium">Position</th>
+                      <th class="px-3 py-3 align-bottom font-medium">Country</th>
+                      <th class="px-3 py-3 align-bottom font-medium">Stage</th>
+                      <th class="px-3 py-3 align-bottom font-medium">Notes</th>
+                      <th class="px-3 py-3 text-center align-bottom font-medium">Audit history</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="c in filteredShortlistedCriticalRecruitment" :key="c.id" class="border-t border-hr-navy/25">
+                      <td class="min-w-0 break-words px-3 py-3 align-top text-slate-900">{{ c.candidateName }}</td>
+                      <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ c.position }}</td>
+                      <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ c.country }}</td>
+                      <td class="min-w-0 px-3 py-3 align-top">
+                        <span :class="[tableDataBadgeClass, criticalRecruitmentStageBadgeClass(c.stage), '!text-center']">
+                          {{ normalizeRecruitmentStage(c.stage) }}
+                        </span>
+                      </td>
+                      <td class="min-w-0 px-3 py-3 align-top text-slate-800">
+                        <div class="break-words whitespace-normal">{{ c.notes || '—' }}</div>
+                      </td>
+                      <td class="min-w-0 px-3 py-3 align-top">
+                        <div class="flex flex-col items-start gap-3">
+                          <AuditTrailSummary entity-type="CriticalRecruitment" :entity-id="c.id" />
+                          <button
+                            type="button"
+                            class="inline-flex h-7 items-center justify-center rounded-md border border-slate-200 bg-slate-50 px-2.5 text-xs text-slate-700 hover:bg-slate-100 disabled:opacity-60"
+                            :disabled="criticalRecruitmentSaving"
+                            title="Restore to active pipeline"
+                            @click="toggleShortlistCandidate(c.id, false)"
+                          >
+                            Restore
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr v-if="filteredShortlistedCriticalRecruitment.length === 0" class="border-t border-hr-navy/25">
+                      <td colspan="6" class="px-3 py-6 text-center text-slate-600">No shortlisted candidates match the current filters.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Teleport>
     </section>
 
     <section v-if="!isReportMode" id="recent-new-hires" class="surface-tint-hero scroll-mt-32 min-w-0 space-y-4 rounded-2xl p-4 shadow-card sm:p-5">
@@ -612,6 +846,16 @@
             >
               <option value="">All</option>
               <option v-for="c in newHireCountries" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+            <span class="whitespace-nowrap">Company</span>
+            <select
+              v-model="selectedNewHireCompany"
+              class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+            >
+              <option value="">All</option>
+              <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
             </select>
           </label>
           <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
@@ -752,16 +996,28 @@
             </p>
           </div>
         </div>
-        <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
-          <span class="whitespace-nowrap">Country</span>
-          <select
-            v-model="selectedOffboardingCountry"
-            class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
-          >
-            <option value="">All</option>
-            <option v-for="c in offboardingCountries" :key="c" :value="c">{{ c }}</option>
-          </select>
-        </label>
+        <div class="flex flex-wrap items-center gap-2">
+          <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+            <span class="whitespace-nowrap">Country</span>
+            <select
+              v-model="selectedOffboardingCountry"
+              class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+            >
+              <option value="">All</option>
+              <option v-for="c in offboardingCountries" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+            <span class="whitespace-nowrap">Company</span>
+            <select
+              v-model="selectedOffboardingCompany"
+              class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+            >
+              <option value="">All</option>
+              <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+        </div>
       </div>
 
       <div v-if="offboardingPending" class="rounded-md border border-slate-200 bg-white shadow-card p-4 text-slate-800">Loading…</div>
@@ -917,6 +1173,16 @@
               </select>
             </label>
             <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+              <span class="whitespace-nowrap">Company</span>
+              <select
+                v-model="selectedCheckinsCompany"
+                class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+              >
+                <option value="">All</option>
+                <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
+              </select>
+            </label>
+            <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
               <span class="whitespace-nowrap">Check-in</span>
               <select
                 v-model="upcomingCheckinsFilter"
@@ -1026,6 +1292,16 @@
             </select>
           </label>
           <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+            <span class="whitespace-nowrap">Company</span>
+            <select
+              v-model="selectedSeparationCompany"
+              class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+            >
+              <option value="">All</option>
+              <option v-for="c in BRANCH_COMPANIES" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+          <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
             <span class="whitespace-nowrap">Month</span>
             <select
               v-model="selectedSeparationMonth"
@@ -1105,7 +1381,7 @@ const route = useRoute()
 const isReportMode = computed(() => route.query.report === '1')
 
 const recruitmentSectionNavItems = [
-  { id: 'critical-vacancies', label: 'Critical Vacancies' },
+  { id: 'critical-vacancies', label: 'Vacancies' },
   { id: 'recruitment-onboarding', label: 'Recruitment & Onboarding' },
   { id: 'recent-new-hires', label: 'New Hires' },
   { id: 'offboarding', label: 'Offboarding' },
@@ -1114,7 +1390,7 @@ const recruitmentSectionNavItems = [
 ] as const
 
 const criticalVacanciesKpi = computed(() => vacancies.value.length)
-const candidatesInPipelineKpi = computed(() => criticalRecruitment.value.length)
+const candidatesInPipelineKpi = computed(() => activeCriticalRecruitment.value.length)
 const newHiresKpi = computed(() => odooNewHires.value.length)
 
 const CHECKIN_APPROACH_WINDOW_DAYS = 14
@@ -1194,6 +1470,7 @@ type Vacancy = {
   positionTitle: string
   department: string
   country: string
+  company: string
   priority: string
   notes: string
   createdAt: string
@@ -1204,9 +1481,11 @@ type CriticalRecruitment = {
   candidateName: string
   position: string
   country: string
+  company: string
   stage: string
   notes?: string
   createdAt: string
+  shortlistedAt: string | null
 }
 
 type NewHire = {
@@ -1225,6 +1504,7 @@ type OdooNewHire = {
   position: string
   department: string
   countryAssigned: string
+  companyAssigned?: string
   startDate: string | null
   tenure?: string
   createdAt: string | null
@@ -1243,6 +1523,7 @@ type Employee = {
   position: string
   startDate: string | null
   countryAssigned: string
+  companyAssigned?: string
   employeeStatus: string
   departureReason?: string
   lastWorkingDay?: string | null
@@ -1257,6 +1538,7 @@ type OdooSeparationsRow = {
   department: string
   position: string
   countryAssigned: string
+  companyAssigned?: string
   startDate: string | null
   separatedAt: string
   separationType:
@@ -1308,25 +1590,21 @@ function normalizeRecruitmentStage(value: string) {
   const trimmed = value.trim()
   if (!trimmed) return ''
   const v = normalizeStage(trimmed)
-  if (v === 'screening stage') return 'Screening Stage'
-  if (v === 'first interview') return 'First Interview'
-  if (v === 'second interview') return 'Second Interview'
-  if (v === 'evaluation stage') return 'Evaluation Stage'
-  if (v === 'offer stage') return 'Offer Stage'
-  if (v === 'pre-onboarding stage') return 'Pre-Onboarding Stage'
-  if (v === 'feedback stage') return 'Feedback Stage'
+  if (v === 'to be interviewed') return 'To be interviewed'
+  if (v === 'being interviewed') return 'Being interviewed'
+  if (v === 'offer to be made/accepted') return 'Offer to be made/accepted'
+  if (v === 'pre-onboarding') return 'Pre-Onboarding'
+  if (v === 'no offer + feedback') return 'No Offer + Feedback'
   return trimmed
 }
 
 function criticalRecruitmentStageBadgeClass(value: string) {
   const v = normalizeStage(normalizeRecruitmentStage(value))
-  if (v === 'screening stage') return 'border-amber-200 bg-amber-50 text-amber-800'
-  if (v === 'first interview') return 'border-sky-200 bg-sky-50 text-sky-800'
-  if (v === 'second interview') return 'border-blue-200 bg-blue-50 text-blue-900'
-  if (v === 'evaluation stage') return 'border-indigo-200 bg-indigo-50 text-indigo-800'
-  if (v === 'offer stage') return 'border-purple-200 bg-purple-50 text-brand-purple'
-  if (v === 'pre-onboarding stage') return 'border-teal-200 bg-teal-50 text-teal-800'
-  if (v === 'feedback stage') return 'border-pink-200 bg-pink-50 text-pink-800'
+  if (v === 'to be interviewed') return 'border-amber-200 bg-amber-50 text-amber-800'
+  if (v === 'being interviewed') return 'border-sky-200 bg-sky-50 text-sky-800'
+  if (v === 'offer to be made/accepted') return 'border-purple-200 bg-purple-50 text-brand-purple'
+  if (v === 'pre-onboarding') return 'border-teal-200 bg-teal-50 text-teal-800'
+  if (v === 'no offer + feedback') return 'border-pink-200 bg-pink-50 text-pink-800'
   return 'border-slate-300 bg-white text-slate-800'
 }
 
@@ -1375,15 +1653,22 @@ const vacanciesErrorMessage = computed(() => getErrorMessage(vacanciesError.valu
 const REPORT_TOP_VACANCIES = 12
 const REPORT_TOP_CANDIDATES = 15
 
+const BRANCH_COMPANIES = ['Ramps Logistics', 'EDO'] as const
+
 const selectedVacancyCountry = ref('')
+const selectedVacancyCompany = ref('')
 const vacancyListCountries = computed(() =>
   ensureUsaOption(uniqueSorted(vacancies.value.map((v) => (v.country ?? '').trim()).filter(Boolean)))
 )
 
 const vacanciesFiltered = computed(() => {
   const c = selectedVacancyCountry.value.trim()
-  if (!c) return vacancies.value
-  return vacancies.value.filter((v) => (v.country ?? '').trim() === c)
+  const co = selectedVacancyCompany.value.trim()
+  return vacancies.value.filter((v) => {
+    if (c && (v.country ?? '').trim() !== c) return false
+    if (co && (v.company ?? '').trim() !== co) return false
+    return true
+  })
 })
 
 const vacanciesForDisplay = computed(() =>
@@ -1412,11 +1697,17 @@ const odooNewHires = computed(() => odooNewHiresData.value?.items ?? [])
 const odooNewHiresErrorMessage = computed(() => getErrorMessage(odooNewHiresError.value))
 
 const selectedNewHireCountry = ref('')
+const selectedNewHireCompany = ref('')
 const newHireCountries = computed(() => ensureUsaOption(uniqueSorted(odooNewHires.value.map((n) => n.countryAssigned))))
 const filteredNewHires = computed(() => {
   const selected = selectedNewHireCountry.value.trim()
+  const selectedCompany = selectedNewHireCompany.value.trim()
   const items = odooNewHires.value ?? []
-  return selected ? items.filter((n) => n.countryAssigned === selected) : items
+  return items.filter((n) => {
+    if (selected && n.countryAssigned !== selected) return false
+    if (selectedCompany && (n.companyAssigned ?? '') !== selectedCompany) return false
+    return true
+  })
 })
 
 type OnboardingChecklistState = Record<string, boolean[]>
@@ -1576,11 +1867,17 @@ const completedCheckinsCount = ref(0)
 const activeCheckinsCount = ref(0)
 const completedCheckinsHistoryOpen = ref(false)
 const selectedCheckinsCountry = ref('')
+const selectedCheckinsCompany = ref('')
 const checkinsCountries = computed(() => ensureUsaOption(uniqueSorted(probationNewHires.value.map((n) => n.countryAssigned))))
 const filteredCheckinsNewHires = computed(() => {
   const selected = selectedCheckinsCountry.value.trim()
+  const selectedCompany = selectedCheckinsCompany.value.trim()
   const items = probationNewHires.value ?? []
-  return selected ? items.filter((n) => n.countryAssigned === selected) : items
+  return items.filter((n) => {
+    if (selected && n.countryAssigned !== selected) return false
+    if (selectedCompany && ((n as any).companyAssigned ?? '') !== selectedCompany) return false
+    return true
+  })
 })
 
 const { data: employeesData, pending: employeesPending, error: employeesError } = useFetch<Employee[]>('/api/odoo/employees')
@@ -1603,11 +1900,17 @@ watchEffect(() => {
 })
 
 const selectedSeparationCountry = ref('')
+const selectedSeparationCompany = ref('')
 const separationCountries = computed(() => ensureUsaOption(uniqueSorted((separationsData.value?.items ?? []).map((e) => e.countryAssigned))))
 const recentSeparations = computed(() => {
   const selected = selectedSeparationCountry.value.trim()
+  const selectedCompany = selectedSeparationCompany.value.trim()
   const items = separationsData.value?.items ?? []
-  const filtered = selected ? items.filter((e) => e.countryAssigned === selected) : items
+  const filtered = items.filter((e) => {
+    if (selected && e.countryAssigned !== selected) return false
+    if (selectedCompany && (e.companyAssigned ?? '') !== selectedCompany) return false
+    return true
+  })
   return filtered.slice().sort((a, b) => a.name.localeCompare(b.name))
 })
 
@@ -1692,28 +1995,36 @@ const vacancyCountries = computed(() => ensureUsaOption(uniqueSorted((employeesD
 const vacancyDepartments = computed(() => uniqueSorted((employeesData.value ?? []).map((e) => e.department)))
 const vacancyPriorities = ['high', 'medium', 'low'] as const
 const criticalRecruitmentStages = [
-  'Screening Stage',
-  'First Interview',
-  'Second Interview',
-  'Evaluation Stage',
-  'Offer Stage',
-  'Pre-Onboarding Stage',
-  'Feedback Stage'
+  'To be interviewed',
+  'Being interviewed',
+  'Offer to be made/accepted',
+  'Pre-Onboarding',
+  'No Offer + Feedback'
 ] as const
 const newHireStatuses = ['Pre-Onboarding Stage', 'Onboarding', 'Hired'] as const
 
 const selectedRecruitmentStage = ref('')
 const selectedRecruitmentCountry = ref('')
+const selectedRecruitmentCompany = ref('')
 
 const criticalRecruitmentCountries = computed(() => ensureUsaOption(uniqueSorted((criticalRecruitment.value ?? []).map((c) => c.country))))
 
-const filteredCriticalRecruitment = computed(() => {
+const activeCriticalRecruitment = computed(() => (criticalRecruitment.value ?? []).filter((c) => !c.shortlistedAt))
+const shortlistedCriticalRecruitment = computed(() => (criticalRecruitment.value ?? []).filter((c) => !!c.shortlistedAt))
+
+function applyCriticalRecruitmentFilters(items: CriticalRecruitment[]) {
   const selected = selectedRecruitmentStage.value.trim()
   const selectedCountry = selectedRecruitmentCountry.value.trim()
-  const items = criticalRecruitment.value ?? []
-  const stageFiltered = selected ? items.filter((c) => normalizeRecruitmentStage(c.stage) === selected) : items
-  return selectedCountry ? stageFiltered.filter((c) => c.country === selectedCountry) : stageFiltered
-})
+  const selectedCompany = selectedRecruitmentCompany.value.trim()
+  let out = items
+  if (selected) out = out.filter((c) => normalizeRecruitmentStage(c.stage) === selected)
+  if (selectedCountry) out = out.filter((c) => c.country === selectedCountry)
+  if (selectedCompany) out = out.filter((c) => (c.company ?? '').trim() === selectedCompany)
+  return out
+}
+
+const filteredCriticalRecruitment = computed(() => applyCriticalRecruitmentFilters(activeCriticalRecruitment.value))
+const filteredShortlistedCriticalRecruitment = computed(() => applyCriticalRecruitmentFilters(shortlistedCriticalRecruitment.value))
 
 const criticalRecruitmentForDisplay = computed(() =>
   isReportMode.value ? filteredCriticalRecruitment.value.slice(0, REPORT_TOP_CANDIDATES) : filteredCriticalRecruitment.value
@@ -1800,21 +2111,27 @@ const {
 const offboardingErrorMessage = computed(() => getErrorMessage(offboardingError.value))
 const offboardingEmployees = computed(() => offboardingData.value ?? [])
 const selectedOffboardingCountry = ref('')
+const selectedOffboardingCompany = ref('')
 const offboardingCountries = computed(() =>
   ensureUsaOption(uniqueSorted(offboardingEmployees.value.map((r) => r.countryAssigned)))
 )
 const filteredOffboardingEmployees = computed(() => {
   const selected = selectedOffboardingCountry.value.trim()
+  const selectedCompany = selectedOffboardingCompany.value.trim()
   const items = offboardingEmployees.value ?? []
-  return selected ? items.filter((r) => r.countryAssigned === selected) : items
+  return items.filter((r) => {
+    if (selected && r.countryAssigned !== selected) return false
+    if (selectedCompany && (r.companyAssigned ?? '') !== selectedCompany) return false
+    return true
+  })
 })
 
 const showVacancyForm = ref(false)
-const vacancyForm = reactive({ positionTitle: '', department: '', country: '', priority: '', notes: '' })
+const vacancyForm = reactive({ positionTitle: '', department: '', country: '', company: 'Ramps Logistics', priority: '', notes: '' })
 const vacancySaving = ref(false)
 const vacancyActionError = ref('')
 const vacancyEditId = ref<string | null>(null)
-const vacancyEditForm = reactive({ positionTitle: '', department: '', country: '', priority: '', notes: '' })
+const vacancyEditForm = reactive({ positionTitle: '', department: '', country: '', company: 'Ramps Logistics', priority: '', notes: '' })
 const vacancyEditError = ref('')
 
 function cancelVacancyCreate() {
@@ -1830,6 +2147,7 @@ async function createVacancy() {
     vacancyForm.positionTitle = ''
     vacancyForm.department = ''
     vacancyForm.country = ''
+    vacancyForm.company = 'Ramps Logistics'
     vacancyForm.priority = ''
     vacancyForm.notes = ''
     showVacancyForm.value = false
@@ -1847,6 +2165,7 @@ function startEditVacancy(v: Vacancy) {
   vacancyEditForm.positionTitle = v.positionTitle
   vacancyEditForm.department = v.department
   vacancyEditForm.country = v.country
+  vacancyEditForm.company = v.company || 'Ramps Logistics'
   vacancyEditForm.priority = v.priority
   vacancyEditForm.notes = v.notes || ''
 }
@@ -1887,11 +2206,11 @@ async function deleteVacancy(id: string) {
 }
 
 const showCriticalRecruitmentForm = ref(false)
-const criticalRecruitmentForm = reactive({ candidateName: '', position: '', country: '', stage: '', notes: '' })
+const criticalRecruitmentForm = reactive({ candidateName: '', position: '', country: '', company: 'Ramps Logistics', stage: '', notes: '' })
 const criticalRecruitmentSaving = ref(false)
 const criticalRecruitmentActionError = ref('')
 const criticalRecruitmentEditId = ref<string | null>(null)
-const criticalRecruitmentEditForm = reactive({ candidateName: '', position: '', country: '', stage: '', notes: '' })
+const criticalRecruitmentEditForm = reactive({ candidateName: '', position: '', country: '', company: 'Ramps Logistics', stage: '', notes: '' })
 const criticalRecruitmentEditError = ref('')
 
 function cancelCriticalRecruitmentCreate() {
@@ -1914,6 +2233,7 @@ async function createCriticalRecruitment() {
     criticalRecruitmentForm.candidateName = ''
     criticalRecruitmentForm.position = ''
     criticalRecruitmentForm.country = ''
+    criticalRecruitmentForm.company = 'Ramps Logistics'
     criticalRecruitmentForm.stage = ''
     criticalRecruitmentForm.notes = ''
     showCriticalRecruitmentForm.value = false
@@ -1931,6 +2251,7 @@ function startEditCriticalRecruitment(c: CriticalRecruitment) {
   criticalRecruitmentEditForm.candidateName = c.candidateName
   criticalRecruitmentEditForm.position = c.position
   criticalRecruitmentEditForm.country = c.country
+  criticalRecruitmentEditForm.company = c.company || 'Ramps Logistics'
   criticalRecruitmentEditForm.stage = normalizeRecruitmentStage(c.stage)
   criticalRecruitmentEditForm.notes = c.notes || ''
 }
@@ -1968,6 +2289,25 @@ async function deleteCriticalRecruitment(id: string) {
   criticalRecruitmentSaving.value = true
   try {
     await $fetch(`/api/critical-recruitment/${id}`, { method: 'DELETE' })
+    if (criticalRecruitmentEditId.value === id) criticalRecruitmentEditId.value = null
+    await refreshCriticalRecruitment()
+  } catch (err) {
+    criticalRecruitmentActionError.value = getErrorMessage(err)
+  } finally {
+    criticalRecruitmentSaving.value = false
+  }
+}
+
+const shortlistedCandidatesModalOpen = ref(false)
+
+async function toggleShortlistCandidate(id: string, shortlisted: boolean) {
+  criticalRecruitmentActionError.value = ''
+  criticalRecruitmentSaving.value = true
+  try {
+    await $fetch(`/api/critical-recruitment/${id}/shortlist`, {
+      method: 'POST',
+      body: { shortlisted }
+    })
     if (criticalRecruitmentEditId.value === id) criticalRecruitmentEditId.value = null
     await refreshCriticalRecruitment()
   } catch (err) {

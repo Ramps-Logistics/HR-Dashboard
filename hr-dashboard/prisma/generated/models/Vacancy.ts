@@ -29,6 +29,7 @@ export type VacancyMinAggregateOutputType = {
   positionTitle: string | null
   department: string | null
   country: string | null
+  company: string | null
   priority: string | null
   notes: string | null
   createdAt: Date | null
@@ -39,6 +40,7 @@ export type VacancyMaxAggregateOutputType = {
   positionTitle: string | null
   department: string | null
   country: string | null
+  company: string | null
   priority: string | null
   notes: string | null
   createdAt: Date | null
@@ -49,6 +51,7 @@ export type VacancyCountAggregateOutputType = {
   positionTitle: number
   department: number
   country: number
+  company: number
   priority: number
   notes: number
   createdAt: number
@@ -61,6 +64,7 @@ export type VacancyMinAggregateInputType = {
   positionTitle?: true
   department?: true
   country?: true
+  company?: true
   priority?: true
   notes?: true
   createdAt?: true
@@ -71,6 +75,7 @@ export type VacancyMaxAggregateInputType = {
   positionTitle?: true
   department?: true
   country?: true
+  company?: true
   priority?: true
   notes?: true
   createdAt?: true
@@ -81,6 +86,7 @@ export type VacancyCountAggregateInputType = {
   positionTitle?: true
   department?: true
   country?: true
+  company?: true
   priority?: true
   notes?: true
   createdAt?: true
@@ -164,6 +170,7 @@ export type VacancyGroupByOutputType = {
   positionTitle: string
   department: string
   country: string
+  company: string
   priority: string
   notes: string
   createdAt: Date
@@ -195,6 +202,7 @@ export type VacancyWhereInput = {
   positionTitle?: Prisma.StringFilter<"Vacancy"> | string
   department?: Prisma.StringFilter<"Vacancy"> | string
   country?: Prisma.StringFilter<"Vacancy"> | string
+  company?: Prisma.StringFilter<"Vacancy"> | string
   priority?: Prisma.StringFilter<"Vacancy"> | string
   notes?: Prisma.StringFilter<"Vacancy"> | string
   createdAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
@@ -205,6 +213,7 @@ export type VacancyOrderByWithRelationInput = {
   positionTitle?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -218,6 +227,7 @@ export type VacancyWhereUniqueInput = Prisma.AtLeast<{
   positionTitle?: Prisma.StringFilter<"Vacancy"> | string
   department?: Prisma.StringFilter<"Vacancy"> | string
   country?: Prisma.StringFilter<"Vacancy"> | string
+  company?: Prisma.StringFilter<"Vacancy"> | string
   priority?: Prisma.StringFilter<"Vacancy"> | string
   notes?: Prisma.StringFilter<"Vacancy"> | string
   createdAt?: Prisma.DateTimeFilter<"Vacancy"> | Date | string
@@ -228,6 +238,7 @@ export type VacancyOrderByWithAggregationInput = {
   positionTitle?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -244,6 +255,7 @@ export type VacancyScalarWhereWithAggregatesInput = {
   positionTitle?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   department?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   country?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
+  company?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   priority?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   notes?: Prisma.StringWithAggregatesFilter<"Vacancy"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Vacancy"> | Date | string
@@ -254,6 +266,7 @@ export type VacancyCreateInput = {
   positionTitle: string
   department: string
   country: string
+  company?: string
   priority: string
   notes?: string
   createdAt?: Date | string
@@ -264,6 +277,7 @@ export type VacancyUncheckedCreateInput = {
   positionTitle: string
   department: string
   country: string
+  company?: string
   priority: string
   notes?: string
   createdAt?: Date | string
@@ -274,6 +288,7 @@ export type VacancyUpdateInput = {
   positionTitle?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -284,6 +299,7 @@ export type VacancyUncheckedUpdateInput = {
   positionTitle?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -294,6 +310,7 @@ export type VacancyCreateManyInput = {
   positionTitle: string
   department: string
   country: string
+  company?: string
   priority: string
   notes?: string
   createdAt?: Date | string
@@ -304,6 +321,7 @@ export type VacancyUpdateManyMutationInput = {
   positionTitle?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -314,6 +332,7 @@ export type VacancyUncheckedUpdateManyInput = {
   positionTitle?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -324,6 +343,7 @@ export type VacancyCountOrderByAggregateInput = {
   positionTitle?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -334,6 +354,7 @@ export type VacancyMaxOrderByAggregateInput = {
   positionTitle?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -344,6 +365,7 @@ export type VacancyMinOrderByAggregateInput = {
   positionTitle?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -364,6 +386,7 @@ export type VacancySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   positionTitle?: boolean
   department?: boolean
   country?: boolean
+  company?: boolean
   priority?: boolean
   notes?: boolean
   createdAt?: boolean
@@ -374,6 +397,7 @@ export type VacancySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   positionTitle?: boolean
   department?: boolean
   country?: boolean
+  company?: boolean
   priority?: boolean
   notes?: boolean
   createdAt?: boolean
@@ -384,6 +408,7 @@ export type VacancySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   positionTitle?: boolean
   department?: boolean
   country?: boolean
+  company?: boolean
   priority?: boolean
   notes?: boolean
   createdAt?: boolean
@@ -394,12 +419,13 @@ export type VacancySelectScalar = {
   positionTitle?: boolean
   department?: boolean
   country?: boolean
+  company?: boolean
   priority?: boolean
   notes?: boolean
   createdAt?: boolean
 }
 
-export type VacancyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "positionTitle" | "department" | "country" | "priority" | "notes" | "createdAt", ExtArgs["result"]["vacancy"]>
+export type VacancyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "positionTitle" | "department" | "country" | "company" | "priority" | "notes" | "createdAt", ExtArgs["result"]["vacancy"]>
 
 export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Vacancy"
@@ -409,6 +435,7 @@ export type $VacancyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     positionTitle: string
     department: string
     country: string
+    company: string
     priority: string
     notes: string
     createdAt: Date
@@ -839,6 +866,7 @@ export interface VacancyFieldRefs {
   readonly positionTitle: Prisma.FieldRef<"Vacancy", 'String'>
   readonly department: Prisma.FieldRef<"Vacancy", 'String'>
   readonly country: Prisma.FieldRef<"Vacancy", 'String'>
+  readonly company: Prisma.FieldRef<"Vacancy", 'String'>
   readonly priority: Prisma.FieldRef<"Vacancy", 'String'>
   readonly notes: Prisma.FieldRef<"Vacancy", 'String'>
   readonly createdAt: Prisma.FieldRef<"Vacancy", 'DateTime'>

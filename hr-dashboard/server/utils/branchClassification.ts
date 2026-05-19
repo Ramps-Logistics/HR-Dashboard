@@ -3,13 +3,14 @@ export const BRANCH_COUNTRIES = [
   'Guyana',
   'USA',
   'Suriname',
-  'El Dorado Offshore GY',
-  'El Dorado Offshore TT',
   'Mexico',
   'Colombia'
 ] as const
 
 export type BranchCountry = (typeof BRANCH_COUNTRIES)[number]
+
+export const BRANCH_COMPANIES = ['Ramps Logistics', 'EDO'] as const
+export type BranchCompany = (typeof BRANCH_COMPANIES)[number]
 
 function norm(input: unknown) {
   const s = String(input ?? '')
@@ -37,28 +38,34 @@ function hasToken(haystack: string, token: string) {
   return new RegExp(`(?:^|\\s)${t}(?:\\s|$)`, 'i').test(haystack)
 }
 
-function title(input: BranchCountry): BranchCountry {
-  return input
-}
+export type BranchAssignment = { country: BranchCountry; company: BranchCompany }
 
-export function classifyBranchCountry(input: {
+export function classifyBranchAssignment(input: {
   companyName?: string | null
   workAddress?: string | null
   fallbackCountry?: string | null
-}): BranchCountry {
+}): BranchAssignment {
   const company = norm(input.companyName)
   const addr = norm(input.workAddress)
   const fallback = norm(input.fallbackCountry)
   const all = `${company} ${addr} ${fallback}`.trim()
 
-  // El Dorado Offshore (GY / TT)
+  // El Dorado Offshore → company = EDO, country derived from regional hints.
   if (hasAny(all, ['el dorado offshore', 'eldorado offshore', 'el dorado'])) {
-    if (hasAny(all, ['guyana', 'georgetown', 'demerara']) || hasToken(all, 'gy')) return title('El Dorado Offshore GY')
-    if (hasAny(all, ['trinidad', 'tobago', 'cunupia', 'port of spain', 'chaguanas']) || hasToken(all, 'tt'))
-      return title('El Dorado Offshore TT')
+    if (hasAny(all, ['guyana', 'georgetown', 'demerara']) || hasToken(all, 'gy')) {
+      return { country: 'Guyana', company: 'EDO' }
+    }
+    if (
+      hasAny(all, ['trinidad', 'tobago', 'cunupia', 'port of spain', 'chaguanas']) ||
+      hasToken(all, 'tt')
+    ) {
+      return { country: 'Trinidad and Tobago', company: 'EDO' }
+    }
+    // Fallback: EDO with unknown region defaults to TT (HQ).
+    return { country: 'Trinidad and Tobago', company: 'EDO' }
   }
 
-  // USA (Ramps Logistics LLC / Houston)
+  // Ramps Logistics LLC (Houston / USA)
   if (
     hasAny(all, ['houston', 'texas', 'united states', 'usa']) ||
     hasToken(all, 'tx') ||
@@ -66,32 +73,41 @@ export function classifyBranchCountry(input: {
     hasAny(all, ['ramps logistics llc']) ||
     company.includes('houston')
   ) {
-    return title('USA')
+    return { country: 'USA', company: 'Ramps Logistics' }
   }
 
-  // Specific country branches
-  if (hasAny(all, ['suriname', 'paramaribo'])) return title('Suriname')
-  if (hasAny(all, ['mexico', 'méxico', 'cdmx', 'mexico city'])) return title('Mexico')
-  if (hasAny(all, ['colombia', 'columbia', 'bogota', 'barranquilla', 'medellin'])) return title('Colombia')
-  if (hasAny(all, ['guyana', 'georgetown'])) return title('Guyana')
-  if (hasAny(all, ['trinidad', 'tobago', 'cunupia', 'port of spain'])) return title('Trinidad and Tobago')
+  // Specific country branches (Ramps Logistics)
+  if (hasAny(all, ['suriname', 'paramaribo'])) return { country: 'Suriname', company: 'Ramps Logistics' }
+  if (hasAny(all, ['mexico', 'méxico', 'cdmx', 'mexico city'])) return { country: 'Mexico', company: 'Ramps Logistics' }
+  if (hasAny(all, ['colombia', 'columbia', 'bogota', 'barranquilla', 'medellin'])) return { country: 'Colombia', company: 'Ramps Logistics' }
+  if (hasAny(all, ['guyana', 'georgetown'])) return { country: 'Guyana', company: 'Ramps Logistics' }
+  if (hasAny(all, ['trinidad', 'tobago', 'cunupia', 'port of spain'])) return { country: 'Trinidad and Tobago', company: 'Ramps Logistics' }
 
   // Company-name fallbacks (when address isn't available)
-  if (hasAny(company, ['guyana'])) return title('Guyana')
-  if (hasAny(company, ['suriname'])) return title('Suriname')
-  if (hasAny(company, ['mexico'])) return title('Mexico')
-  if (hasAny(company, ['colombia', 'columbia'])) return title('Colombia')
-  if (hasAny(company, ['limited', 'ltd'])) return title('Trinidad and Tobago')
+  if (hasAny(company, ['guyana'])) return { country: 'Guyana', company: 'Ramps Logistics' }
+  if (hasAny(company, ['suriname'])) return { country: 'Suriname', company: 'Ramps Logistics' }
+  if (hasAny(company, ['mexico'])) return { country: 'Mexico', company: 'Ramps Logistics' }
+  if (hasAny(company, ['colombia', 'columbia'])) return { country: 'Colombia', company: 'Ramps Logistics' }
+  if (hasAny(company, ['limited', 'ltd'])) return { country: 'Trinidad and Tobago', company: 'Ramps Logistics' }
 
   // Last-resort mapping from Odoo-provided country value.
-  if (hasAny(fallback, ['guyana'])) return title('Guyana')
-  if (hasAny(fallback, ['suriname'])) return title('Suriname')
-  if (hasAny(fallback, ['mexico'])) return title('Mexico')
-  if (hasAny(fallback, ['colombia', 'columbia'])) return title('Colombia')
-  if (hasAny(fallback, ['trinidad', 'tobago', 'tt'])) return title('Trinidad and Tobago')
+  if (hasAny(fallback, ['guyana'])) return { country: 'Guyana', company: 'Ramps Logistics' }
+  if (hasAny(fallback, ['suriname'])) return { country: 'Suriname', company: 'Ramps Logistics' }
+  if (hasAny(fallback, ['mexico'])) return { country: 'Mexico', company: 'Ramps Logistics' }
+  if (hasAny(fallback, ['colombia', 'columbia'])) return { country: 'Colombia', company: 'Ramps Logistics' }
+  if (hasAny(fallback, ['trinidad', 'tobago', 'tt'])) return { country: 'Trinidad and Tobago', company: 'Ramps Logistics' }
 
-  // Must always return one of the allowed categories.
-  return title('Trinidad and Tobago')
+  // Default fallback.
+  return { country: 'Trinidad and Tobago', company: 'Ramps Logistics' }
+}
+
+/** @deprecated Use classifyBranchAssignment() — kept for backward compatibility. */
+export function classifyBranchCountry(input: {
+  companyName?: string | null
+  workAddress?: string | null
+  fallbackCountry?: string | null
+}): BranchCountry {
+  return classifyBranchAssignment(input).country
 }
 
 export function sortBranchCountries(values: string[]): BranchCountry[] {
@@ -99,3 +115,19 @@ export function sortBranchCountries(values: string[]): BranchCountry[] {
   return BRANCH_COUNTRIES.filter((c) => present.has(c))
 }
 
+/** Coerce a legacy stored country (possibly "El Dorado Offshore TT/GY") into the new 6-bucket value. */
+export function normalizeStoredCountry(value: string | null | undefined): BranchCountry | null {
+  const v = (value ?? '').trim()
+  if (!v) return null
+  if (v === 'El Dorado Offshore TT') return 'Trinidad and Tobago'
+  if (v === 'El Dorado Offshore GY') return 'Guyana'
+  if ((BRANCH_COUNTRIES as readonly string[]).includes(v)) return v as BranchCountry
+  return null
+}
+
+/** Coerce a legacy stored country into its implied company (EDO if it was an "El Dorado Offshore *" value). */
+export function inferLegacyCompany(value: string | null | undefined): BranchCompany {
+  const v = (value ?? '').trim()
+  if (v === 'El Dorado Offshore TT' || v === 'El Dorado Offshore GY') return 'EDO'
+  return 'Ramps Logistics'
+}

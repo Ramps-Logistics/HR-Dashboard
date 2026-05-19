@@ -7,6 +7,7 @@ type Row = {
   position: string
   department: string
   countryAssigned: string
+  companyAssigned: string
   startDate: string | null
   tenure?: string
   createdAt: string | null
@@ -127,6 +128,7 @@ export default defineEventHandler(async (event): Promise<Response> => {
       position: e.position,
       department: e.department,
       countryAssigned: e.countryAssigned,
+      companyAssigned: e.companyAssigned,
       startDate: e.startDate ?? null,
       tenure: e.tenure,
       createdAt: e.createdAt ?? null

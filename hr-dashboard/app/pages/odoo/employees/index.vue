@@ -52,6 +52,14 @@
           </label>
 
           <label class="block md:flex-1">
+            <div class="mb-1 text-sm text-slate-600">Company</div>
+            <select v-model="company" class="w-full rounded-md border border-slate-200 bg-white shadow-card px-3 py-2 text-sm text-slate-900">
+              <option value="">All</option>
+              <option v-for="c in companies" :key="c" :value="c">{{ c }}</option>
+            </select>
+          </label>
+
+          <label class="block md:flex-1">
             <div class="mb-1 text-sm text-slate-600">Department</div>
             <select v-model="department" class="w-full rounded-md border border-slate-200 bg-white shadow-card px-3 py-2 text-sm text-slate-900">
               <option value="">All</option>
@@ -135,6 +143,7 @@
                 <th class="px-4 py-3 font-medium">Department</th>
                 <th class="px-4 py-3 font-medium">Position</th>
                 <th class="px-4 py-3 font-medium">Country</th>
+                <th class="px-4 py-3 font-medium">Company</th>
                 <th class="px-4 py-3 font-medium">Employment Type</th>
                 <th class="px-4 py-3 font-medium">Status</th>
                 <th class="px-4 py-3 font-medium">Start Date</th>
@@ -152,6 +161,7 @@
                 <td class="px-4 py-4 text-slate-800">{{ e.department }}</td>
                 <td class="px-4 py-4 text-slate-800">{{ e.position }}</td>
                 <td class="px-4 py-4 text-slate-800">{{ e.countryAssigned }}</td>
+                <td class="px-4 py-4 text-slate-800">{{ e.companyAssigned || '—' }}</td>
                 <td class="px-4 py-4 text-slate-800">{{ e.employeeType ? toTitleCase(e.employeeType) : '—' }}</td>
                 <td class="min-w-0 px-4 py-4">
                   <span :class="[tableDataBadgeClass, employeeStatusBadgeClass(e.employeeStatus)]">
@@ -162,7 +172,7 @@
                 <td v-if="onProbation" class="px-4 py-4 text-slate-800">{{ formatYmdDateOrDash(e.probationEndDate ?? null) }}</td>
               </tr>
               <tr v-if="filteredEmployees.length === 0" class="border-t border-hr-navy/25">
-                <td :colspan="onProbation ? 8 : 7" class="px-4 py-6 text-center text-slate-600">No matching employees.</td>
+                <td :colspan="onProbation ? 9 : 8" class="px-4 py-6 text-center text-slate-600">No matching employees.</td>
               </tr>
             </tbody>
           </table>
@@ -183,6 +193,7 @@ type Employee = {
   position: string
   startDate: string | null
   countryAssigned: string
+  companyAssigned?: string
   employeeType?: string
   employeeStatus: string
   probationEndDate?: string | null
@@ -192,6 +203,7 @@ const { data, pending, error } = useFetch<Employee[]>('/api/odoo/employees')
 
 const search = ref('')
 const country = ref('')
+const company = ref('')
 const department = ref('')
 const employmentType = ref('')
 const status = ref('')
@@ -232,16 +244,20 @@ const BRANCH_COUNTRIES = [
   'Guyana',
   'USA',
   'Suriname',
-  'El Dorado Offshore GY',
-  'El Dorado Offshore TT',
   'Mexico',
   'Colombia'
 ] as const
+
+const BRANCH_COMPANIES = ['Ramps Logistics', 'EDO'] as const
 
 const countries = computed(() => {
   const present = new Set(uniqueSorted(employees.value.map((e) => e.countryAssigned)))
   present.add('USA')
   return BRANCH_COUNTRIES.filter((c) => present.has(c))
+})
+const companies = computed(() => {
+  const present = new Set(uniqueSorted(employees.value.map((e) => e.companyAssigned ?? '')))
+  return BRANCH_COMPANIES.filter((c) => present.has(c))
 })
 const departments = computed(() => uniqueSorted(employees.value.map((e) => e.department)))
 const employmentTypes = computed(() => uniqueSorted(employees.value.map((e) => e.employeeType ?? '')))
@@ -265,6 +281,7 @@ const filteredEmployees = computed(() => {
   return employees.value
     .filter((e) => (q ? e.name.toLowerCase().includes(q) || (qKey ? e.employeeKey === qKey : false) : true))
     .filter((e) => (country.value ? e.countryAssigned === country.value : true))
+    .filter((e) => (company.value ? (e.companyAssigned ?? '') === company.value : true))
     .filter((e) => (department.value ? e.department === department.value : true))
     .filter((e) => (employmentType.value ? (e.employeeType ?? '') === employmentType.value : true))
     .filter((e) => (status.value ? e.employeeStatus === status.value : true))
@@ -286,6 +303,7 @@ function employeeStatusBadgeClass(statusLabel: string) {
 function resetFilters() {
   search.value = ''
   country.value = ''
+  company.value = ''
   department.value = ''
   employmentType.value = ''
   status.value = ''

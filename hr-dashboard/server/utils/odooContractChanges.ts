@@ -9,6 +9,7 @@ export type OdooContractChangeRow = {
   id: string
   employeeName: string
   country?: string
+  company?: string
   department: string
   position: string
   changeTypes: string[]
@@ -310,6 +311,7 @@ export async function loadOdooContractChanges(): Promise<OdooContractChangeRow[]
       id: `odoo-cc-${lineId}`,
       employeeName: (emp?.name ?? '').trim() || many2oneName(r[employeeField]) || 'Unknown employee',
       country: emp?.countryAssigned,
+      company: emp?.companyAssigned,
       department: emp?.department ?? '',
       position: emp?.position ?? '',
       changeTypes,

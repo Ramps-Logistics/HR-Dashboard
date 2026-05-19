@@ -6,6 +6,8 @@ export type Employee = {
   startDate: string | null
   birthDate: string | null
   countryAssigned: string
+  /** Branch company: 'Ramps Logistics' or 'EDO' (derived from Laser company/work-location). */
+  companyAssigned: string
   companyName?: string
   workAddress?: string
   employeeStatus: string

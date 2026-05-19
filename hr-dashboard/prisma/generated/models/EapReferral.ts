@@ -28,6 +28,7 @@ export type EapReferralMinAggregateOutputType = {
   id: string | null
   employeeName: string | null
   country: string | null
+  company: string | null
   referralSource: string | null
   referralDate: string | null
   reasonCategory: string | null
@@ -49,6 +50,7 @@ export type EapReferralMaxAggregateOutputType = {
   id: string | null
   employeeName: string | null
   country: string | null
+  company: string | null
   referralSource: string | null
   referralDate: string | null
   reasonCategory: string | null
@@ -70,6 +72,7 @@ export type EapReferralCountAggregateOutputType = {
   id: number
   employeeName: number
   country: number
+  company: number
   referralSource: number
   referralDate: number
   reasonCategory: number
@@ -93,6 +96,7 @@ export type EapReferralMinAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   referralSource?: true
   referralDate?: true
   reasonCategory?: true
@@ -114,6 +118,7 @@ export type EapReferralMaxAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   referralSource?: true
   referralDate?: true
   reasonCategory?: true
@@ -135,6 +140,7 @@ export type EapReferralCountAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   referralSource?: true
   referralDate?: true
   reasonCategory?: true
@@ -229,6 +235,7 @@ export type EapReferralGroupByOutputType = {
   id: string
   employeeName: string
   country: string
+  company: string
   referralSource: string | null
   referralDate: string
   reasonCategory: string
@@ -271,6 +278,7 @@ export type EapReferralWhereInput = {
   id?: Prisma.UuidFilter<"EapReferral"> | string
   employeeName?: Prisma.StringFilter<"EapReferral"> | string
   country?: Prisma.StringFilter<"EapReferral"> | string
+  company?: Prisma.StringFilter<"EapReferral"> | string
   referralSource?: Prisma.StringNullableFilter<"EapReferral"> | string | null
   referralDate?: Prisma.StringFilter<"EapReferral"> | string
   reasonCategory?: Prisma.StringFilter<"EapReferral"> | string
@@ -292,6 +300,7 @@ export type EapReferralOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   referralSource?: Prisma.SortOrderInput | Prisma.SortOrder
   referralDate?: Prisma.SortOrder
   reasonCategory?: Prisma.SortOrder
@@ -316,6 +325,7 @@ export type EapReferralWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.EapReferralWhereInput | Prisma.EapReferralWhereInput[]
   employeeName?: Prisma.StringFilter<"EapReferral"> | string
   country?: Prisma.StringFilter<"EapReferral"> | string
+  company?: Prisma.StringFilter<"EapReferral"> | string
   referralSource?: Prisma.StringNullableFilter<"EapReferral"> | string | null
   referralDate?: Prisma.StringFilter<"EapReferral"> | string
   reasonCategory?: Prisma.StringFilter<"EapReferral"> | string
@@ -337,6 +347,7 @@ export type EapReferralOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   referralSource?: Prisma.SortOrderInput | Prisma.SortOrder
   referralDate?: Prisma.SortOrder
   reasonCategory?: Prisma.SortOrder
@@ -364,6 +375,7 @@ export type EapReferralScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"EapReferral"> | string
   employeeName?: Prisma.StringWithAggregatesFilter<"EapReferral"> | string
   country?: Prisma.StringWithAggregatesFilter<"EapReferral"> | string
+  company?: Prisma.StringWithAggregatesFilter<"EapReferral"> | string
   referralSource?: Prisma.StringNullableWithAggregatesFilter<"EapReferral"> | string | null
   referralDate?: Prisma.StringWithAggregatesFilter<"EapReferral"> | string
   reasonCategory?: Prisma.StringWithAggregatesFilter<"EapReferral"> | string
@@ -385,6 +397,7 @@ export type EapReferralCreateInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   referralSource?: string | null
   referralDate: string
   reasonCategory: string
@@ -406,6 +419,7 @@ export type EapReferralUncheckedCreateInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   referralSource?: string | null
   referralDate: string
   reasonCategory: string
@@ -427,6 +441,7 @@ export type EapReferralUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   referralSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralDate?: Prisma.StringFieldUpdateOperationsInput | string
   reasonCategory?: Prisma.StringFieldUpdateOperationsInput | string
@@ -448,6 +463,7 @@ export type EapReferralUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   referralSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralDate?: Prisma.StringFieldUpdateOperationsInput | string
   reasonCategory?: Prisma.StringFieldUpdateOperationsInput | string
@@ -469,6 +485,7 @@ export type EapReferralCreateManyInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   referralSource?: string | null
   referralDate: string
   reasonCategory: string
@@ -490,6 +507,7 @@ export type EapReferralUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   referralSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralDate?: Prisma.StringFieldUpdateOperationsInput | string
   reasonCategory?: Prisma.StringFieldUpdateOperationsInput | string
@@ -511,6 +529,7 @@ export type EapReferralUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   referralSource?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referralDate?: Prisma.StringFieldUpdateOperationsInput | string
   reasonCategory?: Prisma.StringFieldUpdateOperationsInput | string
@@ -532,6 +551,7 @@ export type EapReferralCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   referralSource?: Prisma.SortOrder
   referralDate?: Prisma.SortOrder
   reasonCategory?: Prisma.SortOrder
@@ -553,6 +573,7 @@ export type EapReferralMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   referralSource?: Prisma.SortOrder
   referralDate?: Prisma.SortOrder
   reasonCategory?: Prisma.SortOrder
@@ -574,6 +595,7 @@ export type EapReferralMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   referralSource?: Prisma.SortOrder
   referralDate?: Prisma.SortOrder
   reasonCategory?: Prisma.SortOrder
@@ -597,6 +619,7 @@ export type EapReferralSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   referralSource?: boolean
   referralDate?: boolean
   reasonCategory?: boolean
@@ -618,6 +641,7 @@ export type EapReferralSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   referralSource?: boolean
   referralDate?: boolean
   reasonCategory?: boolean
@@ -639,6 +663,7 @@ export type EapReferralSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   referralSource?: boolean
   referralDate?: boolean
   reasonCategory?: boolean
@@ -660,6 +685,7 @@ export type EapReferralSelectScalar = {
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   referralSource?: boolean
   referralDate?: boolean
   reasonCategory?: boolean
@@ -677,7 +703,7 @@ export type EapReferralSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EapReferralOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeName" | "country" | "referralSource" | "referralDate" | "reasonCategory" | "reasonDetails" | "programStatus" | "startDate" | "lastFollowUpDate" | "nextFollowUpDate" | "outcomeNotes" | "ownerHr" | "referralDocsUrl" | "closeDate" | "closedReason" | "createdAt" | "updatedAt", ExtArgs["result"]["eapReferral"]>
+export type EapReferralOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeName" | "country" | "company" | "referralSource" | "referralDate" | "reasonCategory" | "reasonDetails" | "programStatus" | "startDate" | "lastFollowUpDate" | "nextFollowUpDate" | "outcomeNotes" | "ownerHr" | "referralDocsUrl" | "closeDate" | "closedReason" | "createdAt" | "updatedAt", ExtArgs["result"]["eapReferral"]>
 
 export type $EapReferralPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "EapReferral"
@@ -686,6 +712,7 @@ export type $EapReferralPayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     employeeName: string
     country: string
+    company: string
     referralSource: string | null
     referralDate: string
     reasonCategory: string
@@ -1127,6 +1154,7 @@ export interface EapReferralFieldRefs {
   readonly id: Prisma.FieldRef<"EapReferral", 'String'>
   readonly employeeName: Prisma.FieldRef<"EapReferral", 'String'>
   readonly country: Prisma.FieldRef<"EapReferral", 'String'>
+  readonly company: Prisma.FieldRef<"EapReferral", 'String'>
   readonly referralSource: Prisma.FieldRef<"EapReferral", 'String'>
   readonly referralDate: Prisma.FieldRef<"EapReferral", 'String'>
   readonly reasonCategory: Prisma.FieldRef<"EapReferral", 'String'>

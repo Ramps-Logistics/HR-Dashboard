@@ -96,6 +96,17 @@
           </select>
         </label>
 
+        <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+          <span class="whitespace-nowrap">Company</span>
+          <select
+            v-model="filters.company"
+            class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+          >
+            <option value="">All</option>
+            <option v-for="c in companies" :key="c" :value="c">{{ c }}</option>
+          </select>
+        </label>
+
         <div class="flex items-center gap-2 text-sm font-medium text-slate-600">
           <span class="whitespace-nowrap">Change type</span>
           <div ref="filterChangeTypeEl" class="relative">
@@ -178,12 +189,13 @@
       <div v-else class="rounded-md border border-slate-200 bg-white shadow-card">
         <table class="w-full table-fixed border-collapse text-left text-sm">
           <colgroup>
-            <col style="width: 14%" />
-            <col style="width: 8%" />
-            <col style="width: 11%" />
-            <col style="width: 11%" />
-            <col style="width: 17%" />
             <col style="width: 13%" />
+            <col style="width: 8%" />
+            <col style="width: 8%" />
+            <col style="width: 10%" />
+            <col style="width: 13%" />
+            <col style="width: 13%" />
+            <col style="width: 9%" />
             <col style="width: 18%" />
             <col style="width: 8%" />
           </colgroup>
@@ -191,9 +203,10 @@
             <tr>
               <th class="px-3 py-3 align-bottom font-medium">Employee</th>
               <th class="px-3 py-3 align-bottom font-medium">Country</th>
+              <th class="px-3 py-3 align-bottom font-medium">Company</th>
               <th class="px-3 py-3 align-bottom font-medium">Department</th>
               <th class="px-3 py-3 align-bottom font-medium">Position</th>
-              <th class="px-3 py-3 align-bottom font-medium">Change</th>
+              <th class="px-3 py-3 align-bottom font-medium">Proposed Change</th>
               <th class="px-3 py-3 align-bottom font-medium">Status</th>
               <th class="px-3 py-3 align-bottom font-medium">Description</th>
               <th class="px-3 py-3 text-center align-bottom font-medium">Mark Completed</th>
@@ -203,6 +216,7 @@
             <tr v-for="row in filteredContractChanges" :key="row.id" class="border-t border-hr-navy/25 align-top">
               <td class="min-w-0 break-words px-3 py-3 align-top text-slate-900">{{ row.employeeName }}</td>
               <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ row.country || '—' }}</td>
+              <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ (row as any).company || '—' }}</td>
               <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ row.department }}</td>
               <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ row.position }}</td>
               <td class="min-w-0 px-3 py-3 align-top">
@@ -234,11 +248,12 @@
             </tr>
 
             <tr v-if="contractChanges.length === 0" class="border-t border-hr-navy/25">
-              <td colspan="8" class="px-3 py-6 text-center text-slate-600">No contract changes yet.</td>
+              <td colspan="9" class="px-3 py-6 text-center text-slate-600">No contract changes yet.</td>
             </tr>
             <tr v-else-if="filteredContractChanges.length === 0" class="border-t border-hr-navy/25">
-              <td colspan="8" class="px-3 py-6 text-center text-slate-600">No contract changes match the filters.</td>
+              <td colspan="9" class="px-3 py-6 text-center text-slate-600">No contract changes match the filters.</td>
             </tr>
+
           </tbody>
         </table>
       </div>
@@ -286,22 +301,24 @@
             <div v-else class="rounded-md border border-slate-200 bg-white">
               <table class="w-full table-fixed border-collapse text-left text-sm">
                 <colgroup>
-                  <col style="width: 13%" />
+                  <col style="width: 12%" />
                   <col style="width: 7%" />
-                  <col style="width: 10%" />
-                  <col style="width: 10%" />
+                  <col style="width: 7%" />
+                  <col style="width: 9%" />
                   <col style="width: 13%" />
-                  <col style="width: 10%" />
                   <col style="width: 13%" />
-                  <col style="width: 24%" />
+                  <col style="width: 9%" />
+                  <col style="width: 18%" />
+                  <col style="width: 12%" />
                 </colgroup>
                 <thead class="bg-slate-100 text-slate-600">
                   <tr>
                     <th class="px-3 py-3 align-bottom font-medium">Employee</th>
                     <th class="px-3 py-3 align-bottom font-medium">Country</th>
+                    <th class="px-3 py-3 align-bottom font-medium">Company</th>
                     <th class="px-3 py-3 align-bottom font-medium">Department</th>
                     <th class="px-3 py-3 align-bottom font-medium">Position</th>
-                    <th class="px-3 py-3 align-bottom font-medium">Change</th>
+                    <th class="px-3 py-3 align-bottom font-medium">Proposed Change</th>
                     <th class="px-3 py-3 align-bottom font-medium">Status</th>
                     <th class="px-3 py-3 align-bottom font-medium">Description</th>
                     <th class="px-3 py-3 align-bottom font-medium">Audit</th>
@@ -311,6 +328,7 @@
                   <tr v-for="entry in completedContractChangeRows" :key="entry.odooLineId" class="border-t border-hr-navy/25 align-top">
                     <td class="min-w-0 break-words px-3 py-3 align-top text-slate-900">{{ entry.snapshot.employeeName }}</td>
                     <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ entry.snapshot.country || '—' }}</td>
+                    <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ (entry.snapshot as any).company || '—' }}</td>
                     <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ entry.snapshot.department }}</td>
                     <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ entry.snapshot.position }}</td>
                     <td class="min-w-0 px-3 py-3 align-top">
@@ -660,6 +678,11 @@ const pendingActionsKpi = computed(
 
 const { data: employeesData } = useFetch<Employee[]>('/api/odoo/employees')
 const countries = computed(() => ensureUsaOption(uniqueSorted((employeesData.value ?? []).map((e) => e.countryAssigned))))
+const BRANCH_COMPANIES = ['Ramps Logistics', 'EDO'] as const
+const companies = computed(() => {
+  const present = new Set(uniqueSorted((employeesData.value ?? []).map((e) => (e as any).companyAssigned ?? '')))
+  return BRANCH_COMPANIES.filter((c) => present.has(c))
+})
 
 const changeTypeFilterOptions = computed(() => {
   const fromRows = uniqueSorted(contractChanges.value.flatMap((r) => r.changeTypes ?? []))
@@ -669,6 +692,7 @@ const changeTypeFilterOptions = computed(() => {
 
 const filters = reactive({
   country: '',
+  company: '',
   changeTypes: [] as string[]
 })
 
@@ -682,21 +706,24 @@ function filterChangeTypesSummary(selected: string[]) {
   return `${selected.length} types`
 }
 
-const hasActiveFilters = computed(() => filters.country.trim() !== '' || filters.changeTypes.length > 0)
+const hasActiveFilters = computed(() => filters.country.trim() !== '' || filters.company.trim() !== '' || filters.changeTypes.length > 0)
 
 function clearFilters() {
   filters.country = ''
+  filters.company = ''
   filters.changeTypes = []
 }
 
 const filteredContractChanges = computed(() => {
   const list = contractChanges.value ?? []
   const country = filters.country.trim()
+  const company = filters.company.trim()
   const selTypes = filters.changeTypes
   const completions = completionsByLineId.value
   return list.filter((r) => {
     if (completions[r.id]) return false
     if (country && (r.country || '') !== country) return false
+    if (company && ((r as any).company || '') !== company) return false
     if (selTypes.length > 0) {
       const rowTypes = r.changeTypes ?? []
       if (!selTypes.some((t) => rowTypes.includes(t))) return false

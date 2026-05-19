@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { createError, readBody } from 'h3'
 import { prisma } from '../utils/db'
+import { BRANCH_COMPANIES, type BranchCompany } from '../utils/branchClassification'
 
 const CHANGE_TYPES = ['Salary', 'Role', 'Reporting', 'Job Title', 'Contract Extension', 'Non-Renewal'] as const
 type ChangeType = (typeof CHANGE_TYPES)[number]
@@ -11,6 +12,7 @@ type ContractChange = {
   id: string
   employeeName: string
   country: string
+  company: BranchCompany
   department: string
   position: string
   changeTypes: ChangeType[]
@@ -62,11 +64,21 @@ function requireStatus(value: unknown) {
   return v as Status
 }
 
+function requireCompany(value: unknown): BranchCompany {
+  const raw = typeof value === 'string' ? value.trim() : ''
+  if (!raw) throw createError({ statusCode: 400, statusMessage: 'company is required' })
+  if (!(BRANCH_COMPANIES as readonly string[]).includes(raw)) {
+    throw createError({ statusCode: 400, statusMessage: `Invalid company: ${raw}` })
+  }
+  return raw as BranchCompany
+}
+
 export default defineEventHandler(async (event) => {
   const body = (await readBody(event)) as Record<string, unknown> | null
 
   const employeeName = requireNonEmptyString(body?.employeeName, 'employeeName')
   const country = requireNonEmptyString(body?.country, 'country')
+  const company = requireCompany(body?.company)
   const department = requireNonEmptyString(body?.department, 'department')
   const position = requireNonEmptyString(body?.position, 'position')
   const changeTypes = requireChangeTypes(body?.changeTypes)
@@ -79,6 +91,7 @@ export default defineEventHandler(async (event) => {
       id: randomUUID(),
       employeeName,
       country,
+      company,
       department,
       position,
       changeTypes,

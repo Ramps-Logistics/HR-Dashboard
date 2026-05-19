@@ -5,6 +5,7 @@ type Vacancy = {
   positionTitle: string
   department: string
   country: string
+  company: string
   priority: string
   notes: string
   createdAt: string

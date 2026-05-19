@@ -17,6 +17,7 @@ type Row = {
   department: string
   position: string
   countryAssigned: string
+  companyAssigned: string
   startDate: string | null
   separatedAt: string
   separationType: SeparationType
@@ -149,6 +150,7 @@ export default defineEventHandler(async (event): Promise<Response> => {
         department: e.department,
         position: e.position,
         countryAssigned: e.countryAssigned,
+        companyAssigned: e.companyAssigned,
         startDate: e.startDate ?? null,
         separatedAt,
         separationType: normalizeSeparationType(e.employeeStatus ?? '')

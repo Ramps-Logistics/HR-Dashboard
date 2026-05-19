@@ -1,6 +1,6 @@
 import { getQuery } from 'h3'
 import { loadEmployeesFromOdoo } from '../../../utils/odooEmployees'
-import { BRANCH_COUNTRIES } from '../../../utils/branchClassification'
+import { BRANCH_COUNTRIES, BRANCH_COMPANIES } from '../../../utils/branchClassification'
 import {
   classifyWorkforceBucket,
   isActiveEmployeeStatus,
@@ -9,6 +9,7 @@ import {
 
 type HomeAnalytics = {
   headcountByCountry: Array<{ country: string; headcount: number }>
+  headcountByCompany: Array<{ company: string; headcount: number }>
   /** Active employees with Odoo `employment_type` independent contractor (from Laser field mapping). */
   headcountEmploymentSubtotals: { independentContractors: number }
   employmentTypeBreakdown: {
@@ -78,6 +79,7 @@ type HomeAnalytics = {
     position: string
     reportingTo: string
     countryAssigned: string
+    companyAssigned: string
     contractOrProbationEndDate: string
     daysRemaining: number
   }>
@@ -88,6 +90,7 @@ type HomeAnalytics = {
     position: string
     reportingTo: string
     countryAssigned: string
+    companyAssigned: string
     contractOrProbationEndDate: string
     daysRemaining: number
   }>
@@ -413,6 +416,7 @@ export default defineEventHandler(async (event): Promise<HomeAnalytics> => {
   }
 
   const headcountMap = new Map<string, number>()
+  const headcountByCompanyMap = new Map<string, number>()
   const genderByCountry = new Map<string, { male: number; female: number }>()
   const employmentByCountry = new Map<string, { permanent: number; contracted: number; interns: number }>()
   const ageByCountry = new Map<
@@ -437,7 +441,9 @@ export default defineEventHandler(async (event): Promise<HomeAnalytics> => {
     if (isIndependentContractor(e.employeeType)) independentContractorsActive += 1
 
     const country = (e.countryAssigned ?? '').trim()
+    const company = (e.companyAssigned ?? '').trim()
     headcountMap.set(country, (headcountMap.get(country) ?? 0) + 1)
+    if (company) headcountByCompanyMap.set(company, (headcountByCompanyMap.get(company) ?? 0) + 1)
 
     const bucket = classifyWorkforceBucket((e as any).employeeType as string | undefined)
     const empCurrent = employmentByCountry.get(country) ?? { permanent: 0, contracted: 0, interns: 0 }
@@ -489,6 +495,11 @@ export default defineEventHandler(async (event): Promise<HomeAnalytics> => {
   const headcountByCountryOrdered: HomeAnalytics['headcountByCountry'] = BRANCH_COUNTRIES.map((country) => ({
     country,
     headcount: headcountMap.get(country) ?? 0
+  }))
+
+  const headcountByCompanyOrdered: HomeAnalytics['headcountByCompany'] = BRANCH_COMPANIES.map((company) => ({
+    company,
+    headcount: headcountByCompanyMap.get(company) ?? 0
   }))
 
   const employmentTypeByCountryOrdered: HomeAnalytics['employmentTypeBreakdown']['byCountry'] = BRANCH_COUNTRIES.map((country) => {
@@ -573,6 +584,7 @@ export default defineEventHandler(async (event): Promise<HomeAnalytics> => {
       position: e.position,
       reportingTo: e.reportingTo ?? '',
       countryAssigned: e.countryAssigned,
+      companyAssigned: e.companyAssigned,
       contractOrProbationEndDate: endYmd,
       daysRemaining
     }
@@ -592,11 +604,14 @@ export default defineEventHandler(async (event): Promise<HomeAnalytics> => {
         a.employeeKey.localeCompare(b.employeeKey)
     )
 
+  // Probation reviews: keep all overdue items from Jan 1 of the current year (so nothing falls off until actioned),
+  // but still cap upcoming items at the selected window.
+  const startOfYearYmd = `${new Date(todayMs).getUTCFullYear()}-01-01`
   const upcomingProbations = employees
     .filter((e) => isActiveStatus(e.employeeStatus))
     .map((e) => toEndRow(e, e.probationEndDate ?? null))
     .filter((v): v is NonNullable<typeof v> => v !== null)
-    .filter((r) => r.daysRemaining >= -upcomingDays && r.daysRemaining <= upcomingDays)
+    .filter((r) => r.daysRemaining <= upcomingDays && r.contractOrProbationEndDate >= startOfYearYmd)
     .sort(
       (a, b) =>
         a.contractOrProbationEndDate.localeCompare(b.contractOrProbationEndDate) ||
@@ -606,6 +621,7 @@ export default defineEventHandler(async (event): Promise<HomeAnalytics> => {
 
   return {
     headcountByCountry: headcountByCountryOrdered,
+    headcountByCompany: headcountByCompanyOrdered,
     headcountEmploymentSubtotals: {
       independentContractors: independentContractorsActive
     },

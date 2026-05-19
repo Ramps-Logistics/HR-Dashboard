@@ -67,7 +67,8 @@ export const ModelName = {
   ContractChangeReview: 'ContractChangeReview',
   MedicalEnrollmentReview: 'MedicalEnrollmentReview',
   DisciplinaryCaseReview: 'DisciplinaryCaseReview',
-  EmployeePersonalNote: 'EmployeePersonalNote'
+  EmployeePersonalNote: 'EmployeePersonalNote',
+  AuditEvent: 'AuditEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -91,6 +92,7 @@ export const VacancyScalarFieldEnum = {
   positionTitle: 'positionTitle',
   department: 'department',
   country: 'country',
+  company: 'company',
   priority: 'priority',
   notes: 'notes',
   createdAt: 'createdAt'
@@ -104,9 +106,11 @@ export const CriticalRecruitmentScalarFieldEnum = {
   candidateName: 'candidateName',
   position: 'position',
   country: 'country',
+  company: 'company',
   stage: 'stage',
   notes: 'notes',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  shortlistedAt: 'shortlistedAt'
 } as const
 
 export type CriticalRecruitmentScalarFieldEnum = (typeof CriticalRecruitmentScalarFieldEnum)[keyof typeof CriticalRecruitmentScalarFieldEnum]
@@ -117,6 +121,7 @@ export const DisciplinaryCaseScalarFieldEnum = {
   employeeName: 'employeeName',
   department: 'department',
   country: 'country',
+  company: 'company',
   summary: 'summary',
   status: 'status',
   includeInReport: 'includeInReport',
@@ -139,6 +144,7 @@ export const ContractChangeScalarFieldEnum = {
   id: 'id',
   employeeName: 'employeeName',
   country: 'country',
+  company: 'company',
   department: 'department',
   position: 'position',
   changeTypes: 'changeTypes',
@@ -154,6 +160,7 @@ export const MedicalEnrollmentScalarFieldEnum = {
   id: 'id',
   employeeName: 'employeeName',
   country: 'country',
+  company: 'company',
   enrollmentType: 'enrollmentType',
   vendor: 'vendor',
   stage: 'stage',
@@ -173,6 +180,7 @@ export const EapReferralScalarFieldEnum = {
   id: 'id',
   employeeName: 'employeeName',
   country: 'country',
+  company: 'company',
   referralSource: 'referralSource',
   referralDate: 'referralDate',
   reasonCategory: 'reasonCategory',
@@ -291,6 +299,21 @@ export const EmployeePersonalNoteScalarFieldEnum = {
 export type EmployeePersonalNoteScalarFieldEnum = (typeof EmployeePersonalNoteScalarFieldEnum)[keyof typeof EmployeePersonalNoteScalarFieldEnum]
 
 
+export const AuditEventScalarFieldEnum = {
+  id: 'id',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  action: 'action',
+  actorSub: 'actorSub',
+  actorName: 'actorName',
+  actorEmail: 'actorEmail',
+  occurredAt: 'occurredAt',
+  diff: 'diff'
+} as const
+
+export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -304,6 +327,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

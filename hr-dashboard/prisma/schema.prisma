@@ -12,19 +12,22 @@ model Vacancy {
   positionTitle String
   department    String
   country       String
+  company       String   @default("Ramps Logistics")
   priority      String
   notes         String   @default("")
   createdAt     DateTime @default(now())
 }
 
 model CriticalRecruitment {
-  id            String   @id @default(uuid()) @db.Uuid
-  candidateName String
-  position      String
-  country       String
-  stage         String
-  notes         String?
-  createdAt     DateTime @default(now())
+  id             String    @id @default(uuid()) @db.Uuid
+  candidateName  String
+  position       String
+  country        String
+  company        String    @default("Ramps Logistics")
+  stage          String
+  notes          String?
+  createdAt      DateTime  @default(now())
+  shortlistedAt  DateTime?
 }
 
 model DisciplinaryCase {
@@ -32,6 +35,7 @@ model DisciplinaryCase {
   employeeName    String
   department      String
   country         String
+  company         String   @default("Ramps Logistics")
   summary         String
   status          String
   includeInReport Boolean  @default(false)
@@ -48,6 +52,7 @@ model ContractChange {
   id           String   @id @default(uuid()) @db.Uuid
   employeeName String
   country      String
+  company      String   @default("Ramps Logistics")
   department   String
   position     String
   changeTypes  String[]
@@ -60,6 +65,7 @@ model MedicalEnrollment {
   id             String   @id @default(uuid()) @db.Uuid
   employeeName   String
   country        String
+  company        String   @default("Ramps Logistics")
   enrollmentType String?
   vendor         String?
   stage          String
@@ -76,6 +82,7 @@ model EapReferral {
   id              String   @id @default(uuid()) @db.Uuid
   employeeName    String
   country         String
+  company         String   @default("Ramps Logistics")
   referralSource  String?
   referralDate    String
   reasonCategory  String
@@ -161,5 +168,19 @@ model EmployeePersonalNote {
   updatedAt   DateTime @updatedAt
 
   @@index([employeeKey])
+}
+
+model AuditEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  entityType String
+  entityId   String
+  action     String
+  actorSub   String
+  actorName  String   @default("")
+  actorEmail String   @default("")
+  occurredAt DateTime @default(now())
+  diff       Json?
+
+  @@index([entityType, entityId, occurredAt])
 }
 

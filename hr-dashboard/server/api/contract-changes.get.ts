@@ -7,6 +7,7 @@ type ContractChange = {
   id: string
   employeeName: string
   country?: string
+  company?: string
   department: string
   position: string
   changeTypes: ChangeType[]

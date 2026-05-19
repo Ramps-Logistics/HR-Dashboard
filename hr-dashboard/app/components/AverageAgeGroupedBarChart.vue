@@ -175,8 +175,6 @@ function shortCountryLabel(input: string) {
   if (s === 'Guyana') return 'GUY'
   if (s === 'USA') return 'USA'
   if (s === 'Suriname') return 'SUR'
-  if (s === 'El Dorado Offshore GY') return 'EDO GUY'
-  if (s === 'El Dorado Offshore TT') return 'EDO TT'
   if (s === 'Mexico') return 'MEX'
   if (s === 'Colombia') return 'COL'
   if (s.length <= 10) return s
@@ -203,8 +201,6 @@ const BRANCH_ORDER = [
   'Guyana',
   'USA',
   'Suriname',
-  'El Dorado Offshore GY',
-  'El Dorado Offshore TT',
   'Mexico',
   'Colombia'
 ] as const

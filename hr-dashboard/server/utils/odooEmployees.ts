@@ -2,7 +2,7 @@ import { createError } from 'h3'
 import { formatTalentRatingDisplay } from '~/utils/talentRatingDisplay'
 import type { Employee } from './employees'
 import { getOdooClient } from './odoo'
-import { classifyBranchCountry } from './branchClassification'
+import { classifyBranchAssignment } from './branchClassification'
 import { dedupeOdooEmployees } from './dedupeOdooEmployees'
 import { shouldExcludeOdooEmployee } from './odooEmployeeExclusions'
 
@@ -690,7 +690,7 @@ async function mapHrRowsToEmployees(
     const rawWorkAddress = workAddressField ? r?.[workAddressField] : null
     const workAddress = (many2oneName(rawWorkAddress) || safeString(rawWorkAddress)).trim()
 
-    const branchCountry = classifyBranchCountry({
+    const branchAssignment = classifyBranchAssignment({
       companyName,
       workAddress,
       fallbackCountry: countryAssigned
@@ -732,7 +732,8 @@ async function mapHrRowsToEmployees(
       position,
       startDate: startDateField ? toYmd(r?.[startDateField]) : null,
       birthDate: birthDateField ? toYmd(r?.[birthDateField]) : null,
-      countryAssigned: branchCountry,
+      countryAssigned: branchAssignment.country,
+      companyAssigned: branchAssignment.company,
       companyName: companyName || undefined,
       workAddress: workAddress || undefined,
       employeeStatus,

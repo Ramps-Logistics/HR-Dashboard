@@ -9,6 +9,7 @@ export type OdooMedicalEnrollmentRow = {
   id: string
   employeeName: string
   country: string
+  company: string
   enrollmentType?: string
   vendor?: string
   stage: string
@@ -226,6 +227,7 @@ export async function loadOdooMedicalEnrolments(): Promise<OdooMedicalEnrollment
       id: `odoo-med-${lineId}`,
       employeeName: (emp?.name ?? '').trim() || many2oneName(r[employeeField]) || 'Unknown employee',
       country: (emp?.countryAssigned ?? '').trim(),
+      company: (emp?.companyAssigned ?? '').trim(),
       enrollmentType: fieldInfo.enrolment_type ? mapSelectionToLabel(typeDef, r.enrolment_type) : undefined,
       vendor: fieldInfo.vendor ? mapSelectionToLabel(vendorDef, r.vendor) : undefined,
       stage: fieldInfo.status ? mapSelectionToLabel(statusDef, r.status) : '',

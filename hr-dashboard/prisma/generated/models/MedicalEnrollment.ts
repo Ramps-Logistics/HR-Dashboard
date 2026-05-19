@@ -28,6 +28,7 @@ export type MedicalEnrollmentMinAggregateOutputType = {
   id: string | null
   employeeName: string | null
   country: string | null
+  company: string | null
   enrollmentType: string | null
   vendor: string | null
   stage: string | null
@@ -44,6 +45,7 @@ export type MedicalEnrollmentMaxAggregateOutputType = {
   id: string | null
   employeeName: string | null
   country: string | null
+  company: string | null
   enrollmentType: string | null
   vendor: string | null
   stage: string | null
@@ -60,6 +62,7 @@ export type MedicalEnrollmentCountAggregateOutputType = {
   id: number
   employeeName: number
   country: number
+  company: number
   enrollmentType: number
   vendor: number
   stage: number
@@ -78,6 +81,7 @@ export type MedicalEnrollmentMinAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   enrollmentType?: true
   vendor?: true
   stage?: true
@@ -94,6 +98,7 @@ export type MedicalEnrollmentMaxAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   enrollmentType?: true
   vendor?: true
   stage?: true
@@ -110,6 +115,7 @@ export type MedicalEnrollmentCountAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   enrollmentType?: true
   vendor?: true
   stage?: true
@@ -199,6 +205,7 @@ export type MedicalEnrollmentGroupByOutputType = {
   id: string
   employeeName: string
   country: string
+  company: string
   enrollmentType: string | null
   vendor: string | null
   stage: string
@@ -236,6 +243,7 @@ export type MedicalEnrollmentWhereInput = {
   id?: Prisma.UuidFilter<"MedicalEnrollment"> | string
   employeeName?: Prisma.StringFilter<"MedicalEnrollment"> | string
   country?: Prisma.StringFilter<"MedicalEnrollment"> | string
+  company?: Prisma.StringFilter<"MedicalEnrollment"> | string
   enrollmentType?: Prisma.StringNullableFilter<"MedicalEnrollment"> | string | null
   vendor?: Prisma.StringNullableFilter<"MedicalEnrollment"> | string | null
   stage?: Prisma.StringFilter<"MedicalEnrollment"> | string
@@ -252,6 +260,7 @@ export type MedicalEnrollmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   enrollmentType?: Prisma.SortOrderInput | Prisma.SortOrder
   vendor?: Prisma.SortOrderInput | Prisma.SortOrder
   stage?: Prisma.SortOrder
@@ -271,6 +280,7 @@ export type MedicalEnrollmentWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.MedicalEnrollmentWhereInput | Prisma.MedicalEnrollmentWhereInput[]
   employeeName?: Prisma.StringFilter<"MedicalEnrollment"> | string
   country?: Prisma.StringFilter<"MedicalEnrollment"> | string
+  company?: Prisma.StringFilter<"MedicalEnrollment"> | string
   enrollmentType?: Prisma.StringNullableFilter<"MedicalEnrollment"> | string | null
   vendor?: Prisma.StringNullableFilter<"MedicalEnrollment"> | string | null
   stage?: Prisma.StringFilter<"MedicalEnrollment"> | string
@@ -287,6 +297,7 @@ export type MedicalEnrollmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   enrollmentType?: Prisma.SortOrderInput | Prisma.SortOrder
   vendor?: Prisma.SortOrderInput | Prisma.SortOrder
   stage?: Prisma.SortOrder
@@ -309,6 +320,7 @@ export type MedicalEnrollmentScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"MedicalEnrollment"> | string
   employeeName?: Prisma.StringWithAggregatesFilter<"MedicalEnrollment"> | string
   country?: Prisma.StringWithAggregatesFilter<"MedicalEnrollment"> | string
+  company?: Prisma.StringWithAggregatesFilter<"MedicalEnrollment"> | string
   enrollmentType?: Prisma.StringNullableWithAggregatesFilter<"MedicalEnrollment"> | string | null
   vendor?: Prisma.StringNullableWithAggregatesFilter<"MedicalEnrollment"> | string | null
   stage?: Prisma.StringWithAggregatesFilter<"MedicalEnrollment"> | string
@@ -325,6 +337,7 @@ export type MedicalEnrollmentCreateInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   enrollmentType?: string | null
   vendor?: string | null
   stage: string
@@ -341,6 +354,7 @@ export type MedicalEnrollmentUncheckedCreateInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   enrollmentType?: string | null
   vendor?: string | null
   stage: string
@@ -357,6 +371,7 @@ export type MedicalEnrollmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vendor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -373,6 +388,7 @@ export type MedicalEnrollmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vendor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -389,6 +405,7 @@ export type MedicalEnrollmentCreateManyInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   enrollmentType?: string | null
   vendor?: string | null
   stage: string
@@ -405,6 +422,7 @@ export type MedicalEnrollmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vendor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -421,6 +439,7 @@ export type MedicalEnrollmentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   enrollmentType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   vendor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -437,6 +456,7 @@ export type MedicalEnrollmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   enrollmentType?: Prisma.SortOrder
   vendor?: Prisma.SortOrder
   stage?: Prisma.SortOrder
@@ -453,6 +473,7 @@ export type MedicalEnrollmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   enrollmentType?: Prisma.SortOrder
   vendor?: Prisma.SortOrder
   stage?: Prisma.SortOrder
@@ -469,6 +490,7 @@ export type MedicalEnrollmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   enrollmentType?: Prisma.SortOrder
   vendor?: Prisma.SortOrder
   stage?: Prisma.SortOrder
@@ -487,6 +509,7 @@ export type MedicalEnrollmentSelect<ExtArgs extends runtime.Types.Extensions.Int
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   enrollmentType?: boolean
   vendor?: boolean
   stage?: boolean
@@ -503,6 +526,7 @@ export type MedicalEnrollmentSelectCreateManyAndReturn<ExtArgs extends runtime.T
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   enrollmentType?: boolean
   vendor?: boolean
   stage?: boolean
@@ -519,6 +543,7 @@ export type MedicalEnrollmentSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   enrollmentType?: boolean
   vendor?: boolean
   stage?: boolean
@@ -535,6 +560,7 @@ export type MedicalEnrollmentSelectScalar = {
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   enrollmentType?: boolean
   vendor?: boolean
   stage?: boolean
@@ -547,7 +573,7 @@ export type MedicalEnrollmentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MedicalEnrollmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeName" | "country" | "enrollmentType" | "vendor" | "stage" | "dateInitiated" | "nextAction" | "hrRepresentative" | "notes" | "attachmentsUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["medicalEnrollment"]>
+export type MedicalEnrollmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeName" | "country" | "company" | "enrollmentType" | "vendor" | "stage" | "dateInitiated" | "nextAction" | "hrRepresentative" | "notes" | "attachmentsUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["medicalEnrollment"]>
 
 export type $MedicalEnrollmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "MedicalEnrollment"
@@ -556,6 +582,7 @@ export type $MedicalEnrollmentPayload<ExtArgs extends runtime.Types.Extensions.I
     id: string
     employeeName: string
     country: string
+    company: string
     enrollmentType: string | null
     vendor: string | null
     stage: string
@@ -992,6 +1019,7 @@ export interface MedicalEnrollmentFieldRefs {
   readonly id: Prisma.FieldRef<"MedicalEnrollment", 'String'>
   readonly employeeName: Prisma.FieldRef<"MedicalEnrollment", 'String'>
   readonly country: Prisma.FieldRef<"MedicalEnrollment", 'String'>
+  readonly company: Prisma.FieldRef<"MedicalEnrollment", 'String'>
   readonly enrollmentType: Prisma.FieldRef<"MedicalEnrollment", 'String'>
   readonly vendor: Prisma.FieldRef<"MedicalEnrollment", 'String'>
   readonly stage: Prisma.FieldRef<"MedicalEnrollment", 'String'>

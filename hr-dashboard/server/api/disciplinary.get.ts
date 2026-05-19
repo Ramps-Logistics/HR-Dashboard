@@ -6,6 +6,7 @@ type DisciplinaryCase = {
   department?: string
   caseType?: string
   country?: string
+  company?: string
   summary: string
   status: string
   includeInReport: boolean

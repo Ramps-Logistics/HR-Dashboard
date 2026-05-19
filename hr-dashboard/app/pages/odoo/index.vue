@@ -475,6 +475,7 @@ const dashboardMonthLabel = computed(() => {
 
 type HomeAnalytics = {
   headcountByCountry: Array<{ country: string; headcount: number }>
+  headcountByCompany: Array<{ company: string; headcount: number }>
   headcountEmploymentSubtotals: { independentContractors: number }
   employmentTypeBreakdown: {
     overall: { permanent: number; contracted: number; interns: number; total: number }
@@ -704,27 +705,20 @@ function openAdditionsDetails() {
   navigateTo(`/recruitment?section=recent-new-hires&hireMonth=${encodeURIComponent(m)}#recent-new-hires`)
 }
 
-/** TT, GUY, SUR, MEX, COL, USA — aligned with `BRANCH_COUNTRIES` / headcount bar labels. */
-const RAMPS_HEADCOUNT_COUNTRIES = [
-  'Trinidad and Tobago',
-  'Guyana',
-  'Suriname',
-  'Mexico',
-  'Colombia',
-  'USA'
-] as const
-const EDO_HEADCOUNT_COUNTRIES = ['El Dorado Offshore TT', 'El Dorado Offshore GY'] as const
-
-function sumHeadcountForCountries(items: Array<{ country: string; headcount: number }>, countries: readonly string[]) {
-  const map = new Map(items.map((i) => [i.country, Number.isFinite(i.headcount) ? i.headcount : 0]))
-  return countries.reduce((sum, c) => sum + (map.get(c) ?? 0), 0)
+function headcountForCompany(
+  items: Array<{ company: string; headcount: number }> | undefined,
+  company: string
+) {
+  if (!items) return 0
+  const row = items.find((i) => i.company === company)
+  return row && Number.isFinite(row.headcount) ? row.headcount : 0
 }
 
 const rampsHeadcountKpi = computed(() =>
-  sumHeadcountForCountries(analytics.value?.headcountByCountry ?? [], RAMPS_HEADCOUNT_COUNTRIES)
+  headcountForCompany(analytics.value?.headcountByCompany, 'Ramps Logistics')
 )
 const edoHeadcountKpi = computed(() =>
-  sumHeadcountForCountries(analytics.value?.headcountByCountry ?? [], EDO_HEADCOUNT_COUNTRIES)
+  headcountForCompany(analytics.value?.headcountByCompany, 'EDO')
 )
 
 const headcountEmploymentSubtotals = computed(

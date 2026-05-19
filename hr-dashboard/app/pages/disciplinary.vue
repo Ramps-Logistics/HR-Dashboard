@@ -56,6 +56,17 @@
         </label>
 
         <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+          <span class="whitespace-nowrap">Company</span>
+          <select
+            v-model="filters.company"
+            class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+          >
+            <option value="">All</option>
+            <option v-for="c in companyFilterOptions" :key="c" :value="c">{{ c }}</option>
+          </select>
+        </label>
+
+        <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
           <span class="whitespace-nowrap">Status</span>
           <select
             v-model="filters.status"
@@ -111,6 +122,7 @@
               <tr>
                 <th class="px-4 py-3 font-medium">Employee</th>
                 <th class="px-4 py-3 font-medium">Country</th>
+                <th class="px-4 py-3 font-medium">Company</th>
                 <th class="px-4 py-3 font-medium">Summary</th>
                 <th class="px-4 py-3 font-medium">Status</th>
                 <th class="px-4 py-3 font-medium">Created Date</th>
@@ -122,6 +134,7 @@
               <tr v-for="c in casesForDisplay" :key="c.id" class="border-t border-hr-navy/25 align-top">
                 <td class="px-4 py-3 text-slate-900">{{ c.employeeName }}</td>
                 <td class="px-4 py-3 text-slate-800">{{ c.country || '—' }}</td>
+                <td class="px-4 py-3 text-slate-800">{{ (c as any).company || '—' }}</td>
                 <td class="px-4 py-3 text-slate-800">{{ c.summary }}</td>
                 <td class="min-w-0 px-4 py-3">
                   <span :class="[tableDataBadgeClass, statusBadgeClass(c.status)]">
@@ -154,10 +167,10 @@
               </tr>
 
               <tr v-if="cases.length === 0" class="border-t border-hr-navy/25">
-                <td colspan="7" class="px-4 py-6 text-center text-slate-600">No cases yet.</td>
+                <td colspan="8" class="px-4 py-6 text-center text-slate-600">No cases yet.</td>
               </tr>
               <tr v-else-if="casesForDisplay.length === 0" class="border-t border-hr-navy/25">
-                <td colspan="7" class="px-4 py-6 text-center text-slate-600">No cases match the filters.</td>
+                <td colspan="8" class="px-4 py-6 text-center text-slate-600">No cases match the filters.</td>
               </tr>
             </tbody>
           </table>
@@ -223,6 +236,7 @@
                   <tr>
                     <th class="px-3 py-3 align-bottom font-medium">Employee</th>
                     <th class="px-3 py-3 align-bottom font-medium">Country</th>
+                    <th class="px-3 py-3 align-bottom font-medium">Company</th>
                     <th class="px-3 py-3 align-bottom font-medium">Summary</th>
                     <th class="px-3 py-3 align-bottom font-medium">Status</th>
                     <th class="px-3 py-3 align-bottom font-medium">Created Date</th>
@@ -233,6 +247,7 @@
                   <tr v-for="entry in completedCaseRows" :key="entry.odooLineId" class="border-t border-hr-navy/25 align-top">
                     <td class="min-w-0 break-words px-3 py-3 align-top font-medium text-slate-900">{{ entry.snapshot.employeeName }}</td>
                     <td class="min-w-0 px-3 py-3 align-top text-slate-800">{{ entry.snapshot.country || '—' }}</td>
+                    <td class="min-w-0 px-3 py-3 align-top text-slate-800">{{ (entry.snapshot as any).company || '—' }}</td>
                     <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ entry.snapshot.summary }}</td>
                     <td class="min-w-0 px-3 py-3 align-top">
                       <span :class="[tableDataBadgeClass, statusBadgeClass(entry.snapshot.status)]">
@@ -268,6 +283,7 @@ type DisciplinaryCase = {
   department?: string
   caseType?: string
   country?: string
+  company?: string
   summary: string
   status: string
   includeInReport: boolean
@@ -279,6 +295,7 @@ type DisciplinaryCase = {
 type DisciplinaryCaseSnapshot = {
   employeeName: string
   country?: string
+  company?: string
   summary: string
   status: string
   createdAt: string
@@ -356,6 +373,7 @@ const casesSorted = computed(() =>
 
 const filters = reactive({
   country: '',
+  company: '',
   status: ''
 })
 
@@ -363,6 +381,7 @@ const hasActiveFilters = computed(() => Object.values(filters).some((v) => (v ??
 
 function clearFilters() {
   filters.country = ''
+  filters.company = ''
   filters.status = ''
 }
 
@@ -371,6 +390,11 @@ function uniqueSorted(values: string[]) {
 }
 
 const countryFilterOptions = computed(() => uniqueSorted(cases.value.map((c) => c.country || '')))
+const BRANCH_COMPANIES = ['Ramps Logistics', 'EDO'] as const
+const companyFilterOptions = computed(() => {
+  const present = new Set(uniqueSorted(cases.value.map((c) => (c as any).company || '')))
+  return BRANCH_COMPANIES.filter((c) => present.has(c))
+})
 
 const statusFilterOptions = computed(() => uniqueSorted(cases.value.map((c) => c.status)))
 
@@ -394,6 +418,7 @@ function buildSnapshot(c: DisciplinaryCase): DisciplinaryCaseSnapshot {
   return {
     employeeName: c.employeeName,
     country: c.country,
+    company: c.company,
     summary: c.summary,
     status: c.status,
     createdAt: c.createdAt,
@@ -450,11 +475,13 @@ const completedCaseRows = computed(() => {
 
 const casesFiltered = computed(() => {
   const country = filters.country.trim()
+  const company = filters.company.trim()
   const status = filters.status.trim()
   const completions = completionsByLineId.value
   return casesSorted.value.filter((c) => {
     if (completions[c.id]) return false
     if (country && (c.country || '') !== country) return false
+    if (company && ((c as any).company || '') !== company) return false
     if (status && c.status !== status) return false
     return true
   })

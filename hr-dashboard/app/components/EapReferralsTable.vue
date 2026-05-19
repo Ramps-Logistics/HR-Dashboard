@@ -48,6 +48,16 @@
           />
         </label>
         <label class="block">
+          <div class="mb-1 text-sm text-slate-600">Company</div>
+          <select
+            v-model="form.company"
+            class="w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900"
+          >
+            <option value="Ramps Logistics">Ramps Logistics</option>
+            <option value="EDO">EDO</option>
+          </select>
+        </label>
+        <label class="block">
           <div class="mb-1 text-sm text-slate-600">Source</div>
           <input
             v-model="form.referralSource"
@@ -157,6 +167,7 @@
           <tr>
             <th class="px-3 py-3 align-bottom font-medium">Employee</th>
             <th class="px-3 py-3 align-bottom font-medium">Country</th>
+            <th class="px-3 py-3 align-bottom font-medium">Company</th>
             <th class="px-3 py-3 align-bottom font-medium">Source</th>
             <th class="px-3 py-3 align-bottom font-medium">Ref. date</th>
             <th class="px-3 py-3 align-bottom font-medium">Category</th>
@@ -171,6 +182,7 @@
           <tr v-for="row in items" :key="row.id" class="border-t border-hr-navy/25 align-top">
             <td class="min-w-0 break-words px-3 py-3 align-top font-medium text-slate-900">{{ row.employeeName }}</td>
             <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ row.country || '—' }}</td>
+            <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ row.company || '—' }}</td>
             <td class="min-w-0 break-words px-3 py-3 align-top text-slate-800">{{ row.referralSource || '—' }}</td>
             <td class="min-w-0 whitespace-nowrap px-3 py-3 align-top tabular-nums text-slate-800">{{ row.referralDate || '—' }}</td>
             <td class="min-w-0 px-3 py-3 align-top">
@@ -295,6 +307,7 @@ type EapReferral = {
   id: string
   employeeName: string
   country: string
+  company?: string
   referralSource?: string | null
   referralDate: string
   reasonCategory: string
@@ -362,6 +375,7 @@ const formError = ref('')
 const emptyForm = () => ({
   employeeName: '',
   country: '',
+  company: 'Ramps Logistics',
   referralSource: '',
   referralDate: '',
   reasonCategory: '',
@@ -388,6 +402,7 @@ function startEdit(row: EapReferral) {
   editId.value = row.id
   form.employeeName = row.employeeName
   form.country = row.country
+  form.company = row.company || 'Ramps Logistics'
   form.referralSource = row.referralSource ?? ''
   form.referralDate = row.referralDate
   form.reasonCategory = normalizeReasonCategory(row.reasonCategory)
@@ -412,6 +427,7 @@ async function submitForm() {
     const body = {
       employeeName: form.employeeName.trim(),
       country: form.country.trim(),
+      company: form.company || 'Ramps Logistics',
       referralSource: form.referralSource.trim() || undefined,
       referralDate: form.referralDate.trim(),
       reasonCategory: normalizeReasonCategory(form.reasonCategory),

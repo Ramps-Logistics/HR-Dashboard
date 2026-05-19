@@ -47,6 +47,7 @@
 <script setup lang="ts">
 type HomeAnalytics = {
   headcountByCountry: Array<{ country: string; headcount: number }>
+  headcountByCompany: Array<{ company: string; headcount: number }>
   headcountEmploymentSubtotals?: { independentContractors: number }
   employmentTypeBreakdown?: {
     overall: { permanent: number; contracted: number; interns: number; total: number }
@@ -68,17 +69,14 @@ type DisciplinaryCase = { id: string; status: string; includeInReport?: boolean 
 type ExpensesResponse = { month: string | null; items: Array<{ country: string; total: number }> }
 type SeparationsResponse = { items: Array<{ employeeKey: string }> }
 
-const RAMPS_COUNTRIES = ['Trinidad and Tobago', 'Guyana', 'Suriname', 'Mexico', 'Colombia', 'USA'] as const
-const EDO_COUNTRIES = ['El Dorado Offshore TT', 'El Dorado Offshore GY'] as const
+function headcountByCompany(items: Array<{ company: string; headcount: number }> | undefined, company: string) {
+  const row = (items ?? []).find((i) => i.company === company)
+  return row ? safeNum(row.headcount) : 0
+}
 
 function safeNum(v: unknown) {
   const n = typeof v === 'number' ? v : Number(v)
   return Number.isFinite(n) ? n : 0
-}
-
-function sumBy(items: Array<{ country: string; headcount: number }>, countries: readonly string[]) {
-  const map = new Map(items.map((i) => [i.country, safeNum(i.headcount)]))
-  return countries.reduce((s, c) => s + (map.get(c) ?? 0), 0)
 }
 
 definePageMeta({ layout: false })
@@ -126,8 +124,8 @@ const netChange = computed(() => additionsThisMonth.value - separationsThisMonth
 
 const totalHeadcount = computed(() => (analytics.value?.headcountByCountry ?? []).reduce((a, i) => a + safeNum(i.headcount), 0))
 
-const rampsCount = computed(() => sumBy(analytics.value?.headcountByCountry ?? [], RAMPS_COUNTRIES))
-const edoCount = computed(() => sumBy(analytics.value?.headcountByCountry ?? [], EDO_COUNTRIES))
+const rampsCount = computed(() => headcountByCompany(analytics.value?.headcountByCompany, 'Ramps Logistics'))
+const edoCount = computed(() => headcountByCompany(analytics.value?.headcountByCompany, 'EDO'))
 const rampsEdoLabel = computed(() => `RAMPS ${rampsCount.value} | EDO ${edoCount.value}`)
 
 const consultantsLabel = computed(() => {

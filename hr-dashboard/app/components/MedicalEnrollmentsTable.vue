@@ -40,6 +40,17 @@
       </label>
 
       <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
+        <span class="whitespace-nowrap">Company</span>
+        <select
+          v-model="filters.company"
+          class="h-8 rounded-md border border-slate-200 bg-slate-50 px-2 text-sm text-slate-900 outline-none focus:border-slate-400"
+        >
+          <option value="">All</option>
+          <option v-for="c in companies" :key="c" :value="c">{{ c }}</option>
+        </select>
+      </label>
+
+      <label class="flex items-center gap-2 text-sm font-medium text-slate-600">
         <span class="whitespace-nowrap">Vendor</span>
         <select
           v-model="filters.vendor"
@@ -93,19 +104,21 @@
       <table class="w-full table-fixed border-collapse text-left text-sm">
         <colgroup>
           <col style="width: 12%" />
+          <col style="width: 8%" />
           <col style="width: 9%" />
-          <col style="width: 10%" />
-          <col style="width: 10%" />
-          <col style="width: 20%" />
-          <col style="width: 10%" />
+          <col style="width: 9%" />
+          <col style="width: 9%" />
+          <col style="width: 13%" />
+          <col style="width: 9%" />
+          <col style="width: 9%" />
           <col style="width: 14%" />
           <col style="width: 8%" />
-          <col style="width: 7%" />
         </colgroup>
         <thead class="bg-slate-100 text-slate-600">
           <tr>
             <th class="px-3 py-3 align-bottom font-medium">Name</th>
             <th class="px-3 py-3 align-bottom font-medium">Country</th>
+            <th class="px-3 py-3 align-bottom font-medium">Company</th>
             <th class="px-3 py-3 align-bottom font-medium">Type</th>
             <th class="px-3 py-3 align-bottom font-medium">Vendor</th>
             <th class="px-3 py-3 align-bottom font-medium">Status</th>
@@ -119,6 +132,7 @@
           <tr v-for="row in filteredItems" :key="row.id" class="border-t border-hr-navy/25 align-top">
             <td class="min-w-0 break-words px-3 py-3 align-top font-medium text-slate-900">{{ row.employeeName }}</td>
             <td class="min-w-0 px-3 py-3 align-top text-slate-800">{{ row.country || '—' }}</td>
+            <td class="min-w-0 px-3 py-3 align-top text-slate-800">{{ (row as any).company || '—' }}</td>
             <td class="min-w-0 px-3 py-3 align-top">
               <span
                 v-if="row.enrollmentType"
@@ -150,10 +164,10 @@
           </tr>
 
           <tr v-if="items.length === 0" class="border-t border-hr-navy/25">
-            <td colspan="9" class="px-3 py-6 text-center text-slate-600">No enrollments found.</td>
+            <td colspan="10" class="px-3 py-6 text-center text-slate-600">No enrollments found.</td>
           </tr>
           <tr v-else-if="filteredItems.length === 0" class="border-t border-hr-navy/25">
-            <td colspan="9" class="px-3 py-6 text-center text-slate-600">No enrollments match the filters.</td>
+            <td colspan="10" class="px-3 py-6 text-center text-slate-600">No enrollments match the filters.</td>
           </tr>
         </tbody>
       </table>
@@ -202,18 +216,20 @@
               <table class="w-full table-fixed border-collapse text-left text-sm">
                 <colgroup>
                   <col style="width: 12%" />
+                  <col style="width: 7%" />
+                  <col style="width: 7%" />
                   <col style="width: 8%" />
-                  <col style="width: 9%" />
-                  <col style="width: 9%" />
-                  <col style="width: 16%" />
-                  <col style="width: 9%" />
+                  <col style="width: 12%" />
+                  <col style="width: 8%" />
+                  <col style="width: 8%" />
                   <col style="width: 13%" />
-                  <col style="width: 24%" />
+                  <col style="width: 25%" />
                 </colgroup>
                 <thead class="bg-slate-100 text-slate-600">
                   <tr>
                     <th class="px-3 py-3 align-bottom font-medium">Name</th>
                     <th class="px-3 py-3 align-bottom font-medium">Country</th>
+                    <th class="px-3 py-3 align-bottom font-medium">Company</th>
                     <th class="px-3 py-3 align-bottom font-medium">Type</th>
                     <th class="px-3 py-3 align-bottom font-medium">Vendor</th>
                     <th class="px-3 py-3 align-bottom font-medium">Status</th>
@@ -226,6 +242,7 @@
                   <tr v-for="entry in completedMedicalEnrollmentRows" :key="entry.odooLineId" class="border-t border-hr-navy/25 align-top">
                     <td class="min-w-0 break-words px-3 py-3 align-top font-medium text-slate-900">{{ entry.snapshot.employeeName }}</td>
                     <td class="min-w-0 px-3 py-3 align-top text-slate-800">{{ entry.snapshot.country || '—' }}</td>
+                    <td class="min-w-0 px-3 py-3 align-top text-slate-800">{{ (entry.snapshot as any).company || '—' }}</td>
                     <td class="min-w-0 px-3 py-3 align-top">
                       <span
                         v-if="entry.snapshot.enrollmentType"
@@ -271,6 +288,7 @@ type MedicalEnrollment = {
   id: string
   employeeName: string
   country: string
+  company?: string
   enrollmentType?: string
   vendor?: string
   stage: string
@@ -284,6 +302,7 @@ type MedicalEnrollment = {
 type MedicalEnrollmentSnapshot = {
   employeeName: string
   country?: string
+  company?: string
   enrollmentType?: string
   vendor?: string
   stage: string
@@ -303,6 +322,7 @@ type Employee = {
   name: string
   department: string
   countryAssigned: string
+  companyAssigned?: string
 }
 
 const MEDICAL_VENDORS = ['IBWIL', 'GTM'] as const
@@ -405,6 +425,7 @@ function buildSnapshot(row: MedicalEnrollment): MedicalEnrollmentSnapshot {
   return {
     employeeName: row.employeeName,
     country: row.country,
+    company: row.company,
     enrollmentType: row.enrollmentType,
     vendor: row.vendor,
     stage: row.stage,
@@ -464,6 +485,11 @@ const completedMedicalEnrollmentRows = computed(() => {
 
 const { data: employeesData } = useFetch<Employee[]>('/api/odoo/employees')
 const countries = computed(() => ensureUsaOption(uniqueSorted((employeesData.value ?? []).map((e) => e.countryAssigned))))
+const BRANCH_COMPANIES = ['Ramps Logistics', 'EDO'] as const
+const companies = computed(() => {
+  const present = new Set(uniqueSorted((employeesData.value ?? []).map((e) => (e as any).companyAssigned ?? '')))
+  return BRANCH_COMPANIES.filter((c) => present.has(c))
+})
 
 const stageFilterOptions = computed(() => {
   const fromRows = uniqueSorted((items.value ?? []).map((r) => normalizeStage(r.stage)).filter(Boolean))
@@ -478,6 +504,7 @@ const vendorFilterOptions = computed(() => {
 const filters = reactive({
   stage: '',
   country: '',
+  company: '',
   vendor: ''
 })
 
@@ -486,6 +513,7 @@ const hasActiveFilters = computed(() => Object.values(filters).some((v) => (v ??
 function clearFilters() {
   filters.stage = ''
   filters.country = ''
+  filters.company = ''
   filters.vendor = ''
 }
 
@@ -493,6 +521,7 @@ const filteredItems = computed(() => {
   const list = items.value ?? []
   const stage = filters.stage.trim()
   const country = filters.country.trim()
+  const company = filters.company.trim()
   const vendor = filters.vendor.trim()
   const completions = completionsByLineId.value
 
@@ -500,6 +529,7 @@ const filteredItems = computed(() => {
     if (completions[r.id]) return false
     if (stage && normalizeStage(r.stage) !== stage) return false
     if (country && (r.country || '') !== country) return false
+    if (company && ((r as any).company || '') !== company) return false
     if (vendor && (r.vendor || '') !== vendor) return false
     return true
   })

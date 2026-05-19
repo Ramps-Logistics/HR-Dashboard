@@ -1,11 +1,13 @@
 import { randomUUID } from 'node:crypto'
 import { createError, readBody } from 'h3'
 import { prisma } from '../utils/db'
+import { BRANCH_COMPANIES, type BranchCompany } from '../utils/branchClassification'
 
 type MedicalEnrollment = {
   id: string
   employeeName: string
   country: string
+  company: BranchCompany
   enrollmentType?: string
   vendor?: string
   stage: string
@@ -32,10 +34,20 @@ function optionalTrimmedString(value: unknown) {
   return s ? s : undefined
 }
 
+function requireCompany(value: unknown): BranchCompany {
+  const raw = typeof value === 'string' ? value.trim() : ''
+  if (!raw) throw createError({ statusCode: 400, statusMessage: 'company is required' })
+  if (!(BRANCH_COMPANIES as readonly string[]).includes(raw)) {
+    throw createError({ statusCode: 400, statusMessage: `Invalid company: ${raw}` })
+  }
+  return raw as BranchCompany
+}
+
 export default defineEventHandler(async (event) => {
   const body = (await readBody(event)) as Record<string, unknown> | null
   const employeeName = requireNonEmptyString(body?.employeeName, 'employeeName')
   const country = requireNonEmptyString(body?.country, 'country')
+  const company = requireCompany(body?.company)
   const stage = requireNonEmptyString(body?.stage, 'stage')
 
   const enrollmentType = optionalTrimmedString(body?.enrollmentType)
@@ -52,6 +64,7 @@ export default defineEventHandler(async (event) => {
       id: randomUUID(),
       employeeName,
       country,
+      company,
       enrollmentType,
       vendor,
       stage,

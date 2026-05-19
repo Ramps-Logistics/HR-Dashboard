@@ -4,6 +4,7 @@ type MedicalEnrollment = {
   id: string
   employeeName: string
   country: string
+  company: string
   enrollmentType?: string
   vendor?: string
   stage: string

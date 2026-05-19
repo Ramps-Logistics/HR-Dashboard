@@ -29,9 +29,11 @@ export type CriticalRecruitmentMinAggregateOutputType = {
   candidateName: string | null
   position: string | null
   country: string | null
+  company: string | null
   stage: string | null
   notes: string | null
   createdAt: Date | null
+  shortlistedAt: Date | null
 }
 
 export type CriticalRecruitmentMaxAggregateOutputType = {
@@ -39,9 +41,11 @@ export type CriticalRecruitmentMaxAggregateOutputType = {
   candidateName: string | null
   position: string | null
   country: string | null
+  company: string | null
   stage: string | null
   notes: string | null
   createdAt: Date | null
+  shortlistedAt: Date | null
 }
 
 export type CriticalRecruitmentCountAggregateOutputType = {
@@ -49,9 +53,11 @@ export type CriticalRecruitmentCountAggregateOutputType = {
   candidateName: number
   position: number
   country: number
+  company: number
   stage: number
   notes: number
   createdAt: number
+  shortlistedAt: number
   _all: number
 }
 
@@ -61,9 +67,11 @@ export type CriticalRecruitmentMinAggregateInputType = {
   candidateName?: true
   position?: true
   country?: true
+  company?: true
   stage?: true
   notes?: true
   createdAt?: true
+  shortlistedAt?: true
 }
 
 export type CriticalRecruitmentMaxAggregateInputType = {
@@ -71,9 +79,11 @@ export type CriticalRecruitmentMaxAggregateInputType = {
   candidateName?: true
   position?: true
   country?: true
+  company?: true
   stage?: true
   notes?: true
   createdAt?: true
+  shortlistedAt?: true
 }
 
 export type CriticalRecruitmentCountAggregateInputType = {
@@ -81,9 +91,11 @@ export type CriticalRecruitmentCountAggregateInputType = {
   candidateName?: true
   position?: true
   country?: true
+  company?: true
   stage?: true
   notes?: true
   createdAt?: true
+  shortlistedAt?: true
   _all?: true
 }
 
@@ -164,9 +176,11 @@ export type CriticalRecruitmentGroupByOutputType = {
   candidateName: string
   position: string
   country: string
+  company: string
   stage: string
   notes: string | null
   createdAt: Date
+  shortlistedAt: Date | null
   _count: CriticalRecruitmentCountAggregateOutputType | null
   _min: CriticalRecruitmentMinAggregateOutputType | null
   _max: CriticalRecruitmentMaxAggregateOutputType | null
@@ -195,9 +209,11 @@ export type CriticalRecruitmentWhereInput = {
   candidateName?: Prisma.StringFilter<"CriticalRecruitment"> | string
   position?: Prisma.StringFilter<"CriticalRecruitment"> | string
   country?: Prisma.StringFilter<"CriticalRecruitment"> | string
+  company?: Prisma.StringFilter<"CriticalRecruitment"> | string
   stage?: Prisma.StringFilter<"CriticalRecruitment"> | string
   notes?: Prisma.StringNullableFilter<"CriticalRecruitment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CriticalRecruitment"> | Date | string
+  shortlistedAt?: Prisma.DateTimeNullableFilter<"CriticalRecruitment"> | Date | string | null
 }
 
 export type CriticalRecruitmentOrderByWithRelationInput = {
@@ -205,9 +221,11 @@ export type CriticalRecruitmentOrderByWithRelationInput = {
   candidateName?: Prisma.SortOrder
   position?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   stage?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  shortlistedAt?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type CriticalRecruitmentWhereUniqueInput = Prisma.AtLeast<{
@@ -218,9 +236,11 @@ export type CriticalRecruitmentWhereUniqueInput = Prisma.AtLeast<{
   candidateName?: Prisma.StringFilter<"CriticalRecruitment"> | string
   position?: Prisma.StringFilter<"CriticalRecruitment"> | string
   country?: Prisma.StringFilter<"CriticalRecruitment"> | string
+  company?: Prisma.StringFilter<"CriticalRecruitment"> | string
   stage?: Prisma.StringFilter<"CriticalRecruitment"> | string
   notes?: Prisma.StringNullableFilter<"CriticalRecruitment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CriticalRecruitment"> | Date | string
+  shortlistedAt?: Prisma.DateTimeNullableFilter<"CriticalRecruitment"> | Date | string | null
 }, "id">
 
 export type CriticalRecruitmentOrderByWithAggregationInput = {
@@ -228,9 +248,11 @@ export type CriticalRecruitmentOrderByWithAggregationInput = {
   candidateName?: Prisma.SortOrder
   position?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   stage?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  shortlistedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.CriticalRecruitmentCountOrderByAggregateInput
   _max?: Prisma.CriticalRecruitmentMaxOrderByAggregateInput
   _min?: Prisma.CriticalRecruitmentMinOrderByAggregateInput
@@ -244,9 +266,11 @@ export type CriticalRecruitmentScalarWhereWithAggregatesInput = {
   candidateName?: Prisma.StringWithAggregatesFilter<"CriticalRecruitment"> | string
   position?: Prisma.StringWithAggregatesFilter<"CriticalRecruitment"> | string
   country?: Prisma.StringWithAggregatesFilter<"CriticalRecruitment"> | string
+  company?: Prisma.StringWithAggregatesFilter<"CriticalRecruitment"> | string
   stage?: Prisma.StringWithAggregatesFilter<"CriticalRecruitment"> | string
   notes?: Prisma.StringNullableWithAggregatesFilter<"CriticalRecruitment"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CriticalRecruitment"> | Date | string
+  shortlistedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CriticalRecruitment"> | Date | string | null
 }
 
 export type CriticalRecruitmentCreateInput = {
@@ -254,9 +278,11 @@ export type CriticalRecruitmentCreateInput = {
   candidateName: string
   position: string
   country: string
+  company?: string
   stage: string
   notes?: string | null
   createdAt?: Date | string
+  shortlistedAt?: Date | string | null
 }
 
 export type CriticalRecruitmentUncheckedCreateInput = {
@@ -264,9 +290,11 @@ export type CriticalRecruitmentUncheckedCreateInput = {
   candidateName: string
   position: string
   country: string
+  company?: string
   stage: string
   notes?: string | null
   createdAt?: Date | string
+  shortlistedAt?: Date | string | null
 }
 
 export type CriticalRecruitmentUpdateInput = {
@@ -274,9 +302,11 @@ export type CriticalRecruitmentUpdateInput = {
   candidateName?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   stage?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shortlistedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CriticalRecruitmentUncheckedUpdateInput = {
@@ -284,9 +314,11 @@ export type CriticalRecruitmentUncheckedUpdateInput = {
   candidateName?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   stage?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shortlistedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CriticalRecruitmentCreateManyInput = {
@@ -294,9 +326,11 @@ export type CriticalRecruitmentCreateManyInput = {
   candidateName: string
   position: string
   country: string
+  company?: string
   stage: string
   notes?: string | null
   createdAt?: Date | string
+  shortlistedAt?: Date | string | null
 }
 
 export type CriticalRecruitmentUpdateManyMutationInput = {
@@ -304,9 +338,11 @@ export type CriticalRecruitmentUpdateManyMutationInput = {
   candidateName?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   stage?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shortlistedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CriticalRecruitmentUncheckedUpdateManyInput = {
@@ -314,9 +350,11 @@ export type CriticalRecruitmentUncheckedUpdateManyInput = {
   candidateName?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   stage?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  shortlistedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type CriticalRecruitmentCountOrderByAggregateInput = {
@@ -324,9 +362,11 @@ export type CriticalRecruitmentCountOrderByAggregateInput = {
   candidateName?: Prisma.SortOrder
   position?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   stage?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  shortlistedAt?: Prisma.SortOrder
 }
 
 export type CriticalRecruitmentMaxOrderByAggregateInput = {
@@ -334,9 +374,11 @@ export type CriticalRecruitmentMaxOrderByAggregateInput = {
   candidateName?: Prisma.SortOrder
   position?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   stage?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  shortlistedAt?: Prisma.SortOrder
 }
 
 export type CriticalRecruitmentMinOrderByAggregateInput = {
@@ -344,13 +386,19 @@ export type CriticalRecruitmentMinOrderByAggregateInput = {
   candidateName?: Prisma.SortOrder
   position?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   stage?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  shortlistedAt?: Prisma.SortOrder
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 
@@ -360,9 +408,11 @@ export type CriticalRecruitmentSelect<ExtArgs extends runtime.Types.Extensions.I
   candidateName?: boolean
   position?: boolean
   country?: boolean
+  company?: boolean
   stage?: boolean
   notes?: boolean
   createdAt?: boolean
+  shortlistedAt?: boolean
 }, ExtArgs["result"]["criticalRecruitment"]>
 
 export type CriticalRecruitmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -370,9 +420,11 @@ export type CriticalRecruitmentSelectCreateManyAndReturn<ExtArgs extends runtime
   candidateName?: boolean
   position?: boolean
   country?: boolean
+  company?: boolean
   stage?: boolean
   notes?: boolean
   createdAt?: boolean
+  shortlistedAt?: boolean
 }, ExtArgs["result"]["criticalRecruitment"]>
 
 export type CriticalRecruitmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -380,9 +432,11 @@ export type CriticalRecruitmentSelectUpdateManyAndReturn<ExtArgs extends runtime
   candidateName?: boolean
   position?: boolean
   country?: boolean
+  company?: boolean
   stage?: boolean
   notes?: boolean
   createdAt?: boolean
+  shortlistedAt?: boolean
 }, ExtArgs["result"]["criticalRecruitment"]>
 
 export type CriticalRecruitmentSelectScalar = {
@@ -390,12 +444,14 @@ export type CriticalRecruitmentSelectScalar = {
   candidateName?: boolean
   position?: boolean
   country?: boolean
+  company?: boolean
   stage?: boolean
   notes?: boolean
   createdAt?: boolean
+  shortlistedAt?: boolean
 }
 
-export type CriticalRecruitmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "candidateName" | "position" | "country" | "stage" | "notes" | "createdAt", ExtArgs["result"]["criticalRecruitment"]>
+export type CriticalRecruitmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "candidateName" | "position" | "country" | "company" | "stage" | "notes" | "createdAt" | "shortlistedAt", ExtArgs["result"]["criticalRecruitment"]>
 
 export type $CriticalRecruitmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CriticalRecruitment"
@@ -405,9 +461,11 @@ export type $CriticalRecruitmentPayload<ExtArgs extends runtime.Types.Extensions
     candidateName: string
     position: string
     country: string
+    company: string
     stage: string
     notes: string | null
     createdAt: Date
+    shortlistedAt: Date | null
   }, ExtArgs["result"]["criticalRecruitment"]>
   composites: {}
 }
@@ -835,9 +893,11 @@ export interface CriticalRecruitmentFieldRefs {
   readonly candidateName: Prisma.FieldRef<"CriticalRecruitment", 'String'>
   readonly position: Prisma.FieldRef<"CriticalRecruitment", 'String'>
   readonly country: Prisma.FieldRef<"CriticalRecruitment", 'String'>
+  readonly company: Prisma.FieldRef<"CriticalRecruitment", 'String'>
   readonly stage: Prisma.FieldRef<"CriticalRecruitment", 'String'>
   readonly notes: Prisma.FieldRef<"CriticalRecruitment", 'String'>
   readonly createdAt: Prisma.FieldRef<"CriticalRecruitment", 'DateTime'>
+  readonly shortlistedAt: Prisma.FieldRef<"CriticalRecruitment", 'DateTime'>
 }
     
 

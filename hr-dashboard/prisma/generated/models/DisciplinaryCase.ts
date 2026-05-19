@@ -29,6 +29,7 @@ export type DisciplinaryCaseMinAggregateOutputType = {
   employeeName: string | null
   department: string | null
   country: string | null
+  company: string | null
   summary: string | null
   status: string | null
   includeInReport: boolean | null
@@ -40,6 +41,7 @@ export type DisciplinaryCaseMaxAggregateOutputType = {
   employeeName: string | null
   department: string | null
   country: string | null
+  company: string | null
   summary: string | null
   status: string | null
   includeInReport: boolean | null
@@ -51,6 +53,7 @@ export type DisciplinaryCaseCountAggregateOutputType = {
   employeeName: number
   department: number
   country: number
+  company: number
   summary: number
   status: number
   includeInReport: number
@@ -64,6 +67,7 @@ export type DisciplinaryCaseMinAggregateInputType = {
   employeeName?: true
   department?: true
   country?: true
+  company?: true
   summary?: true
   status?: true
   includeInReport?: true
@@ -75,6 +79,7 @@ export type DisciplinaryCaseMaxAggregateInputType = {
   employeeName?: true
   department?: true
   country?: true
+  company?: true
   summary?: true
   status?: true
   includeInReport?: true
@@ -86,6 +91,7 @@ export type DisciplinaryCaseCountAggregateInputType = {
   employeeName?: true
   department?: true
   country?: true
+  company?: true
   summary?: true
   status?: true
   includeInReport?: true
@@ -170,6 +176,7 @@ export type DisciplinaryCaseGroupByOutputType = {
   employeeName: string
   department: string
   country: string
+  company: string
   summary: string
   status: string
   includeInReport: boolean
@@ -202,6 +209,7 @@ export type DisciplinaryCaseWhereInput = {
   employeeName?: Prisma.StringFilter<"DisciplinaryCase"> | string
   department?: Prisma.StringFilter<"DisciplinaryCase"> | string
   country?: Prisma.StringFilter<"DisciplinaryCase"> | string
+  company?: Prisma.StringFilter<"DisciplinaryCase"> | string
   summary?: Prisma.StringFilter<"DisciplinaryCase"> | string
   status?: Prisma.StringFilter<"DisciplinaryCase"> | string
   includeInReport?: Prisma.BoolFilter<"DisciplinaryCase"> | boolean
@@ -213,6 +221,7 @@ export type DisciplinaryCaseOrderByWithRelationInput = {
   employeeName?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   status?: Prisma.SortOrder
   includeInReport?: Prisma.SortOrder
@@ -227,6 +236,7 @@ export type DisciplinaryCaseWhereUniqueInput = Prisma.AtLeast<{
   employeeName?: Prisma.StringFilter<"DisciplinaryCase"> | string
   department?: Prisma.StringFilter<"DisciplinaryCase"> | string
   country?: Prisma.StringFilter<"DisciplinaryCase"> | string
+  company?: Prisma.StringFilter<"DisciplinaryCase"> | string
   summary?: Prisma.StringFilter<"DisciplinaryCase"> | string
   status?: Prisma.StringFilter<"DisciplinaryCase"> | string
   includeInReport?: Prisma.BoolFilter<"DisciplinaryCase"> | boolean
@@ -238,6 +248,7 @@ export type DisciplinaryCaseOrderByWithAggregationInput = {
   employeeName?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   status?: Prisma.SortOrder
   includeInReport?: Prisma.SortOrder
@@ -255,6 +266,7 @@ export type DisciplinaryCaseScalarWhereWithAggregatesInput = {
   employeeName?: Prisma.StringWithAggregatesFilter<"DisciplinaryCase"> | string
   department?: Prisma.StringWithAggregatesFilter<"DisciplinaryCase"> | string
   country?: Prisma.StringWithAggregatesFilter<"DisciplinaryCase"> | string
+  company?: Prisma.StringWithAggregatesFilter<"DisciplinaryCase"> | string
   summary?: Prisma.StringWithAggregatesFilter<"DisciplinaryCase"> | string
   status?: Prisma.StringWithAggregatesFilter<"DisciplinaryCase"> | string
   includeInReport?: Prisma.BoolWithAggregatesFilter<"DisciplinaryCase"> | boolean
@@ -266,6 +278,7 @@ export type DisciplinaryCaseCreateInput = {
   employeeName: string
   department: string
   country: string
+  company?: string
   summary: string
   status: string
   includeInReport?: boolean
@@ -277,6 +290,7 @@ export type DisciplinaryCaseUncheckedCreateInput = {
   employeeName: string
   department: string
   country: string
+  company?: string
   summary: string
   status: string
   includeInReport?: boolean
@@ -288,6 +302,7 @@ export type DisciplinaryCaseUpdateInput = {
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   includeInReport?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -299,6 +314,7 @@ export type DisciplinaryCaseUncheckedUpdateInput = {
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   includeInReport?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -310,6 +326,7 @@ export type DisciplinaryCaseCreateManyInput = {
   employeeName: string
   department: string
   country: string
+  company?: string
   summary: string
   status: string
   includeInReport?: boolean
@@ -321,6 +338,7 @@ export type DisciplinaryCaseUpdateManyMutationInput = {
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   includeInReport?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -332,6 +350,7 @@ export type DisciplinaryCaseUncheckedUpdateManyInput = {
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   summary?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   includeInReport?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -343,6 +362,7 @@ export type DisciplinaryCaseCountOrderByAggregateInput = {
   employeeName?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   status?: Prisma.SortOrder
   includeInReport?: Prisma.SortOrder
@@ -354,6 +374,7 @@ export type DisciplinaryCaseMaxOrderByAggregateInput = {
   employeeName?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   status?: Prisma.SortOrder
   includeInReport?: Prisma.SortOrder
@@ -365,6 +386,7 @@ export type DisciplinaryCaseMinOrderByAggregateInput = {
   employeeName?: Prisma.SortOrder
   department?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   summary?: Prisma.SortOrder
   status?: Prisma.SortOrder
   includeInReport?: Prisma.SortOrder
@@ -382,6 +404,7 @@ export type DisciplinaryCaseSelect<ExtArgs extends runtime.Types.Extensions.Inte
   employeeName?: boolean
   department?: boolean
   country?: boolean
+  company?: boolean
   summary?: boolean
   status?: boolean
   includeInReport?: boolean
@@ -393,6 +416,7 @@ export type DisciplinaryCaseSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   employeeName?: boolean
   department?: boolean
   country?: boolean
+  company?: boolean
   summary?: boolean
   status?: boolean
   includeInReport?: boolean
@@ -404,6 +428,7 @@ export type DisciplinaryCaseSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   employeeName?: boolean
   department?: boolean
   country?: boolean
+  company?: boolean
   summary?: boolean
   status?: boolean
   includeInReport?: boolean
@@ -415,13 +440,14 @@ export type DisciplinaryCaseSelectScalar = {
   employeeName?: boolean
   department?: boolean
   country?: boolean
+  company?: boolean
   summary?: boolean
   status?: boolean
   includeInReport?: boolean
   createdAt?: boolean
 }
 
-export type DisciplinaryCaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeName" | "department" | "country" | "summary" | "status" | "includeInReport" | "createdAt", ExtArgs["result"]["disciplinaryCase"]>
+export type DisciplinaryCaseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeName" | "department" | "country" | "company" | "summary" | "status" | "includeInReport" | "createdAt", ExtArgs["result"]["disciplinaryCase"]>
 
 export type $DisciplinaryCasePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "DisciplinaryCase"
@@ -431,6 +457,7 @@ export type $DisciplinaryCasePayload<ExtArgs extends runtime.Types.Extensions.In
     employeeName: string
     department: string
     country: string
+    company: string
     summary: string
     status: string
     includeInReport: boolean
@@ -862,6 +889,7 @@ export interface DisciplinaryCaseFieldRefs {
   readonly employeeName: Prisma.FieldRef<"DisciplinaryCase", 'String'>
   readonly department: Prisma.FieldRef<"DisciplinaryCase", 'String'>
   readonly country: Prisma.FieldRef<"DisciplinaryCase", 'String'>
+  readonly company: Prisma.FieldRef<"DisciplinaryCase", 'String'>
   readonly summary: Prisma.FieldRef<"DisciplinaryCase", 'String'>
   readonly status: Prisma.FieldRef<"DisciplinaryCase", 'String'>
   readonly includeInReport: Prisma.FieldRef<"DisciplinaryCase", 'Boolean'>

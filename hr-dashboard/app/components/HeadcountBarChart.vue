@@ -169,8 +169,6 @@ const BRANCH_ABBREV: Record<string, string> = {
   Guyana: 'GUY',
   USA: 'USA',
   Suriname: 'SUR',
-  'El Dorado Offshore GY': 'EDO GUY',
-  'El Dorado Offshore TT': 'EDO TT',
   Mexico: 'MEX',
   Colombia: 'COL'
 }

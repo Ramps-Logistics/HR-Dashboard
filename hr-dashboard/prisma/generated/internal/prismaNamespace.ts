@@ -400,7 +400,8 @@ export const ModelName = {
   ContractChangeReview: 'ContractChangeReview',
   MedicalEnrollmentReview: 'MedicalEnrollmentReview',
   DisciplinaryCaseReview: 'DisciplinaryCaseReview',
-  EmployeePersonalNote: 'EmployeePersonalNote'
+  EmployeePersonalNote: 'EmployeePersonalNote',
+  AuditEvent: 'AuditEvent'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "vacancy" | "criticalRecruitment" | "disciplinaryCase" | "disciplinaryCaseInclude" | "contractChange" | "medicalEnrollment" | "eapReferral" | "cPlayerNote" | "headcountSnapshot" | "upcomingContractExpiryStatus" | "recruitmentOnboardingChecklist" | "recruitmentExitChecklist" | "newHireCheckinStatus" | "contractChangeReview" | "medicalEnrollmentReview" | "disciplinaryCaseReview" | "employeePersonalNote"
+    modelProps: "vacancy" | "criticalRecruitment" | "disciplinaryCase" | "disciplinaryCaseInclude" | "contractChange" | "medicalEnrollment" | "eapReferral" | "cPlayerNote" | "headcountSnapshot" | "upcomingContractExpiryStatus" | "recruitmentOnboardingChecklist" | "recruitmentExitChecklist" | "newHireCheckinStatus" | "contractChangeReview" | "medicalEnrollmentReview" | "disciplinaryCaseReview" | "employeePersonalNote" | "auditEvent"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1678,6 +1679,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AuditEvent: {
+      payload: Prisma.$AuditEventPayload<ExtArgs>
+      fields: Prisma.AuditEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AuditEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AuditEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        findFirst: {
+          args: Prisma.AuditEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AuditEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        findMany: {
+          args: Prisma.AuditEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+        }
+        create: {
+          args: Prisma.AuditEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        createMany: {
+          args: Prisma.AuditEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AuditEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+        }
+        delete: {
+          args: Prisma.AuditEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        update: {
+          args: Prisma.AuditEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.AuditEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AuditEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AuditEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.AuditEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuditEventPayload>
+        }
+        aggregate: {
+          args: Prisma.AuditEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAuditEvent>
+        }
+        groupBy: {
+          args: Prisma.AuditEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuditEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AuditEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuditEventCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1722,6 +1797,7 @@ export const VacancyScalarFieldEnum = {
   positionTitle: 'positionTitle',
   department: 'department',
   country: 'country',
+  company: 'company',
   priority: 'priority',
   notes: 'notes',
   createdAt: 'createdAt'
@@ -1735,9 +1811,11 @@ export const CriticalRecruitmentScalarFieldEnum = {
   candidateName: 'candidateName',
   position: 'position',
   country: 'country',
+  company: 'company',
   stage: 'stage',
   notes: 'notes',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  shortlistedAt: 'shortlistedAt'
 } as const
 
 export type CriticalRecruitmentScalarFieldEnum = (typeof CriticalRecruitmentScalarFieldEnum)[keyof typeof CriticalRecruitmentScalarFieldEnum]
@@ -1748,6 +1826,7 @@ export const DisciplinaryCaseScalarFieldEnum = {
   employeeName: 'employeeName',
   department: 'department',
   country: 'country',
+  company: 'company',
   summary: 'summary',
   status: 'status',
   includeInReport: 'includeInReport',
@@ -1770,6 +1849,7 @@ export const ContractChangeScalarFieldEnum = {
   id: 'id',
   employeeName: 'employeeName',
   country: 'country',
+  company: 'company',
   department: 'department',
   position: 'position',
   changeTypes: 'changeTypes',
@@ -1785,6 +1865,7 @@ export const MedicalEnrollmentScalarFieldEnum = {
   id: 'id',
   employeeName: 'employeeName',
   country: 'country',
+  company: 'company',
   enrollmentType: 'enrollmentType',
   vendor: 'vendor',
   stage: 'stage',
@@ -1804,6 +1885,7 @@ export const EapReferralScalarFieldEnum = {
   id: 'id',
   employeeName: 'employeeName',
   country: 'country',
+  company: 'company',
   referralSource: 'referralSource',
   referralDate: 'referralDate',
   reasonCategory: 'reasonCategory',
@@ -1922,6 +2004,21 @@ export const EmployeePersonalNoteScalarFieldEnum = {
 export type EmployeePersonalNoteScalarFieldEnum = (typeof EmployeePersonalNoteScalarFieldEnum)[keyof typeof EmployeePersonalNoteScalarFieldEnum]
 
 
+export const AuditEventScalarFieldEnum = {
+  id: 'id',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  action: 'action',
+  actorSub: 'actorSub',
+  actorName: 'actorName',
+  actorEmail: 'actorEmail',
+  occurredAt: 'occurredAt',
+  diff: 'diff'
+} as const
+
+export type AuditEventScalarFieldEnum = (typeof AuditEventScalarFieldEnum)[keyof typeof AuditEventScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1935,6 +2032,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -2156,6 +2261,7 @@ export type GlobalOmitConfig = {
   medicalEnrollmentReview?: Prisma.MedicalEnrollmentReviewOmit
   disciplinaryCaseReview?: Prisma.DisciplinaryCaseReviewOmit
   employeePersonalNote?: Prisma.EmployeePersonalNoteOmit
+  auditEvent?: Prisma.AuditEventOmit
 }
 
 /* Types for Logging */

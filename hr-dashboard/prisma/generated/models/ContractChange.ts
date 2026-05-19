@@ -28,6 +28,7 @@ export type ContractChangeMinAggregateOutputType = {
   id: string | null
   employeeName: string | null
   country: string | null
+  company: string | null
   department: string | null
   position: string | null
   status: string | null
@@ -39,6 +40,7 @@ export type ContractChangeMaxAggregateOutputType = {
   id: string | null
   employeeName: string | null
   country: string | null
+  company: string | null
   department: string | null
   position: string | null
   status: string | null
@@ -50,6 +52,7 @@ export type ContractChangeCountAggregateOutputType = {
   id: number
   employeeName: number
   country: number
+  company: number
   department: number
   position: number
   changeTypes: number
@@ -64,6 +67,7 @@ export type ContractChangeMinAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   department?: true
   position?: true
   status?: true
@@ -75,6 +79,7 @@ export type ContractChangeMaxAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   department?: true
   position?: true
   status?: true
@@ -86,6 +91,7 @@ export type ContractChangeCountAggregateInputType = {
   id?: true
   employeeName?: true
   country?: true
+  company?: true
   department?: true
   position?: true
   changeTypes?: true
@@ -171,6 +177,7 @@ export type ContractChangeGroupByOutputType = {
   id: string
   employeeName: string
   country: string
+  company: string
   department: string
   position: string
   changeTypes: string[]
@@ -204,6 +211,7 @@ export type ContractChangeWhereInput = {
   id?: Prisma.UuidFilter<"ContractChange"> | string
   employeeName?: Prisma.StringFilter<"ContractChange"> | string
   country?: Prisma.StringFilter<"ContractChange"> | string
+  company?: Prisma.StringFilter<"ContractChange"> | string
   department?: Prisma.StringFilter<"ContractChange"> | string
   position?: Prisma.StringFilter<"ContractChange"> | string
   changeTypes?: Prisma.StringNullableListFilter<"ContractChange">
@@ -216,6 +224,7 @@ export type ContractChangeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   department?: Prisma.SortOrder
   position?: Prisma.SortOrder
   changeTypes?: Prisma.SortOrder
@@ -231,6 +240,7 @@ export type ContractChangeWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ContractChangeWhereInput | Prisma.ContractChangeWhereInput[]
   employeeName?: Prisma.StringFilter<"ContractChange"> | string
   country?: Prisma.StringFilter<"ContractChange"> | string
+  company?: Prisma.StringFilter<"ContractChange"> | string
   department?: Prisma.StringFilter<"ContractChange"> | string
   position?: Prisma.StringFilter<"ContractChange"> | string
   changeTypes?: Prisma.StringNullableListFilter<"ContractChange">
@@ -243,6 +253,7 @@ export type ContractChangeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   department?: Prisma.SortOrder
   position?: Prisma.SortOrder
   changeTypes?: Prisma.SortOrder
@@ -261,6 +272,7 @@ export type ContractChangeScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"ContractChange"> | string
   employeeName?: Prisma.StringWithAggregatesFilter<"ContractChange"> | string
   country?: Prisma.StringWithAggregatesFilter<"ContractChange"> | string
+  company?: Prisma.StringWithAggregatesFilter<"ContractChange"> | string
   department?: Prisma.StringWithAggregatesFilter<"ContractChange"> | string
   position?: Prisma.StringWithAggregatesFilter<"ContractChange"> | string
   changeTypes?: Prisma.StringNullableListFilter<"ContractChange">
@@ -273,6 +285,7 @@ export type ContractChangeCreateInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   department: string
   position: string
   changeTypes?: Prisma.ContractChangeCreatechangeTypesInput | string[]
@@ -285,6 +298,7 @@ export type ContractChangeUncheckedCreateInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   department: string
   position: string
   changeTypes?: Prisma.ContractChangeCreatechangeTypesInput | string[]
@@ -297,6 +311,7 @@ export type ContractChangeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
   changeTypes?: Prisma.ContractChangeUpdatechangeTypesInput | string[]
@@ -309,6 +324,7 @@ export type ContractChangeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
   changeTypes?: Prisma.ContractChangeUpdatechangeTypesInput | string[]
@@ -321,6 +337,7 @@ export type ContractChangeCreateManyInput = {
   id?: string
   employeeName: string
   country: string
+  company?: string
   department: string
   position: string
   changeTypes?: Prisma.ContractChangeCreatechangeTypesInput | string[]
@@ -333,6 +350,7 @@ export type ContractChangeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
   changeTypes?: Prisma.ContractChangeUpdatechangeTypesInput | string[]
@@ -345,6 +363,7 @@ export type ContractChangeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   employeeName?: Prisma.StringFieldUpdateOperationsInput | string
   country?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
   department?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.StringFieldUpdateOperationsInput | string
   changeTypes?: Prisma.ContractChangeUpdatechangeTypesInput | string[]
@@ -365,6 +384,7 @@ export type ContractChangeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   department?: Prisma.SortOrder
   position?: Prisma.SortOrder
   changeTypes?: Prisma.SortOrder
@@ -377,6 +397,7 @@ export type ContractChangeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   department?: Prisma.SortOrder
   position?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -388,6 +409,7 @@ export type ContractChangeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   employeeName?: Prisma.SortOrder
   country?: Prisma.SortOrder
+  company?: Prisma.SortOrder
   department?: Prisma.SortOrder
   position?: Prisma.SortOrder
   status?: Prisma.SortOrder
@@ -410,6 +432,7 @@ export type ContractChangeSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   department?: boolean
   position?: boolean
   changeTypes?: boolean
@@ -422,6 +445,7 @@ export type ContractChangeSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   department?: boolean
   position?: boolean
   changeTypes?: boolean
@@ -434,6 +458,7 @@ export type ContractChangeSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   department?: boolean
   position?: boolean
   changeTypes?: boolean
@@ -446,6 +471,7 @@ export type ContractChangeSelectScalar = {
   id?: boolean
   employeeName?: boolean
   country?: boolean
+  company?: boolean
   department?: boolean
   position?: boolean
   changeTypes?: boolean
@@ -454,7 +480,7 @@ export type ContractChangeSelectScalar = {
   createdAt?: boolean
 }
 
-export type ContractChangeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeName" | "country" | "department" | "position" | "changeTypes" | "status" | "description" | "createdAt", ExtArgs["result"]["contractChange"]>
+export type ContractChangeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employeeName" | "country" | "company" | "department" | "position" | "changeTypes" | "status" | "description" | "createdAt", ExtArgs["result"]["contractChange"]>
 
 export type $ContractChangePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ContractChange"
@@ -463,6 +489,7 @@ export type $ContractChangePayload<ExtArgs extends runtime.Types.Extensions.Inte
     id: string
     employeeName: string
     country: string
+    company: string
     department: string
     position: string
     changeTypes: string[]
@@ -895,6 +922,7 @@ export interface ContractChangeFieldRefs {
   readonly id: Prisma.FieldRef<"ContractChange", 'String'>
   readonly employeeName: Prisma.FieldRef<"ContractChange", 'String'>
   readonly country: Prisma.FieldRef<"ContractChange", 'String'>
+  readonly company: Prisma.FieldRef<"ContractChange", 'String'>
   readonly department: Prisma.FieldRef<"ContractChange", 'String'>
   readonly position: Prisma.FieldRef<"ContractChange", 'String'>
   readonly changeTypes: Prisma.FieldRef<"ContractChange", 'String[]'>

@@ -1,11 +1,13 @@
 import { createError, getRouterParam, readBody } from 'h3'
 import { prisma } from '../../utils/db'
+import { BRANCH_COMPANIES, type BranchCompany } from '../../utils/branchClassification'
 
 type DisciplinaryCase = {
   id: string
   employeeName: string
   department: string
   country: string
+  company: BranchCompany
   summary: string
   status: string
   includeInReport: boolean
@@ -35,6 +37,7 @@ export default defineEventHandler(async (event) => {
   const employeeNameRaw = body?.employeeName
   const departmentRaw = body?.department
   const countryRaw = body?.country
+  const companyRaw = body?.company
   const summaryRaw = body?.summary
   const statusRaw = body?.status
   const includeInReportRaw = body?.includeInReport
@@ -49,9 +52,19 @@ export default defineEventHandler(async (event) => {
   const status = statusRaw === undefined ? existing.status : requireNonEmptyString(statusRaw, 'status')
   const includeInReport = includeInReportRaw === undefined ? existing.includeInReport : (optionalBoolean(includeInReportRaw) ?? existing.includeInReport)
 
+  let company: BranchCompany = (existing.company as BranchCompany) ?? 'Ramps Logistics'
+  if (companyRaw !== undefined) {
+    const raw = typeof companyRaw === 'string' ? companyRaw.trim() : ''
+    if (!raw) throw createError({ statusCode: 400, statusMessage: 'company is required' })
+    if (!(BRANCH_COMPANIES as readonly string[]).includes(raw)) {
+      throw createError({ statusCode: 400, statusMessage: `Invalid company: ${raw}` })
+    }
+    company = raw as BranchCompany
+  }
+
   const updated = await prisma.disciplinaryCase.update({
     where: { id },
-    data: { employeeName, department, country, summary, status, includeInReport }
+    data: { employeeName, department, country, company, summary, status, includeInReport }
   })
 
   return { ...updated, createdAt: updated.createdAt.toISOString() }

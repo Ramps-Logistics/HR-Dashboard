@@ -4,6 +4,7 @@ type EapReferral = {
   id: string
   employeeName: string
   country: string
+  company: string
   referralSource?: string
   referralDate: string
   reasonCategory: string

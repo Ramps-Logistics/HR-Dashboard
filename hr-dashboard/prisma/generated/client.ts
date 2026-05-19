@@ -124,3 +124,8 @@ export type DisciplinaryCaseReview = Prisma.DisciplinaryCaseReviewModel
  * 
  */
 export type EmployeePersonalNote = Prisma.EmployeePersonalNoteModel
+/**
+ * Model AuditEvent
+ * 
+ */
+export type AuditEvent = Prisma.AuditEventModel

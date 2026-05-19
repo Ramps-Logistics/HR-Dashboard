@@ -11,6 +11,7 @@ export type OdooDisciplinaryCaseRow = {
   employeeName: string
   department?: string
   country?: string
+  company?: string
   summary: string
   status: string
   includeInReport: boolean
@@ -126,6 +127,7 @@ function mapDisciplineRowsToOutput(
       employeeName: (emp?.name ?? '').trim() || many2oneName(r[employeeField]) || 'Unknown employee',
       department: emp?.department,
       country: emp?.countryAssigned,
+      company: emp?.companyAssigned,
       summary: safeString(r.case_summary).trim() || '—',
       status: fieldInfo.status ? mapSelectionToLabel(statusDef, r.status) : safeString(r.status).trim() || '—',
       includeInReport: false,
